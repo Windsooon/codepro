@@ -5,7 +5,8 @@ import Link from "next/link"
 import { 
   BarChart3, 
   Code,
-  Trophy
+  Trophy,
+  GitBranch
 } from "lucide-react"
 
 import {
@@ -68,6 +69,16 @@ export function Navbar({ activeSection, onSectionChange }: NavbarProps) {
                 </NavigationMenuItem>
               )
             })}
+            
+            {/* Two-Pointer Decision Tree Link */}
+            <NavigationMenuItem>
+              <NavigationMenuLink asChild>
+                <Link href="/two-pointer-tree" className={navigationMenuTriggerStyle()}>
+                  <GitBranch className="h-4 w-4 mr-2" />
+                  Two-Pointer Tree
+                </Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
       </div>
