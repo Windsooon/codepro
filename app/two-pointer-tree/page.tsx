@@ -1,7 +1,8 @@
 'use client'
 
 import React, { useCallback, useMemo } from 'react'
-import ReactFlow, {
+import {
+  ReactFlow,
   Node,
   Edge,
   addEdge,
@@ -14,8 +15,8 @@ import ReactFlow, {
   NodeTypes,
   Handle,
   Position,
-} from 'reactflow'
-import 'reactflow/dist/style.css'
+} from '@xyflow/react'
+import '@xyflow/react/dist/style.css'
 
 // Custom Decision Node Component
 const DecisionNode = ({ data }: { data: any }) => {
@@ -334,6 +335,8 @@ export default function TwoPointerTreePage() {
         <div className="text-sm text-gray-500 mt-2">
           <strong>How to use:</strong> Start from the purple root node and follow the green "Yes" or red "No" paths based on your problem characteristics. 
           Each green leaf node contains the recommended technique, data structures, complexity, and relevant LeetCode problems.
+          <br />
+          <strong>Controls:</strong> Zoom with mouse wheel, pan by dragging, and use the control panel in the bottom-left corner.
         </div>
       </div>
       
