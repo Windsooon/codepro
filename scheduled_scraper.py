@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Polymarket Trade Data Scraper
-Fetches trade data from Polymarket API and stores in PostgreSQL database
+Polymarket Trade Data Scraper - Scheduled Version
+Can be run with environment variables to control behavior
 """
 
 import requests
@@ -17,31 +17,21 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('polymarket_scraper.log'),
-        logging.StreamHandler()
+        logging.StreamHandler()  # Only console logging for Railway
     ]
 )
 logger = logging.getLogger(__name__)
 
 # Database connection - Railway automatically provides DATABASE_URL environment variable
-DATABASE_URL = os.getenv('DATABASE_URL', 'postgresql://postgres:JNwCjKyNCIMuVXlzubdgMEvRJiJUwFjC@ballast.proxy.rlwy.net:21403/railway')
+DATABASE_URL = os.getenv('DATABASE_URL')
 
-# Alternative: individual parameters (comment out DATABASE_URL above if using this)
-# DB_CONFIG = {
-#     'host': 'ballast.proxy.rlwy.net',
-#     'port': 21403,
-#     'database': 'railway',
-#     'user': 'postgres',
-#     'password': 'JNwCjKyNCIMuVXlzubdgMEvRJiJUwFjC'
-# }
-
-# API configuration
+# API configuration - can be overridden with environment variables
 API_BASE_URL = 'https://data-api.polymarket.com/trades'
-RECORDS_PER_PAGE = 500
-TOTAL_PAGES = 4000
-REQUEST_DELAY = 5  # seconds between requests
-RETRY_DELAY = 20   # seconds to wait before retry
-MAX_RETRIES = 3
+RECORDS_PER_PAGE = int(os.getenv('RECORDS_PER_PAGE', '500'))
+TOTAL_PAGES = int(os.getenv('TOTAL_PAGES', '4000'))
+REQUEST_DELAY = int(os.getenv('REQUEST_DELAY', '5'))  # seconds between requests
+RETRY_DELAY = int(os.getenv('RETRY_DELAY', '20'))   # seconds to wait before retry
+MAX_RETRIES = int(os.getenv('MAX_RETRIES', '3'))
 
 class PolymarketScraper:
     def __init__(self):
@@ -53,12 +43,11 @@ class PolymarketScraper:
 
     def connect_db(self):
         """Establish database connection"""
+        if not DATABASE_URL:
+            raise ValueError("DATABASE_URL environment variable is required")
+        
         try:
-            # Use DATABASE_URL if defined, otherwise use DB_CONFIG
-            if 'DATABASE_URL' in globals() and DATABASE_URL:
-                self.conn = psycopg2.connect(DATABASE_URL)
-            else:
-                self.conn = psycopg2.connect(**DB_CONFIG)
+            self.conn = psycopg2.connect(DATABASE_URL)
             self.cursor = self.conn.cursor()
             logger.info("Successfully connected to PostgreSQL database")
         except psycopg2.Error as e:
@@ -210,6 +199,7 @@ class PolymarketScraper:
     def run_scraper(self):
         """Main scraping loop"""
         logger.info(f"Starting Polymarket scraper - fetching {TOTAL_PAGES} pages")
+        logger.info(f"Configuration: {RECORDS_PER_PAGE} records/page, {REQUEST_DELAY}s delay, {MAX_RETRIES} retries")
         
         try:
             self.connect_db()
