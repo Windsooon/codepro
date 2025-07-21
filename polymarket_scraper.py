@@ -22,14 +22,17 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Database connection parameters (fill in your actual credentials)
-DB_CONFIG = {
-    'host': 'localhost',      # Replace with your PostgreSQL host
-    'port': 5432,             # Replace with your PostgreSQL port
-    'database': 'your_db',    # Replace with your database name
-    'user': 'your_user',      # Replace with your username
-    'password': 'your_pass'   # Replace with your password
-}
+# Database connection - can use either URL or individual parameters
+DATABASE_URL = 'postgresql://postgres:JNwCjKyNCIMuVXlzubdgMEvRJiJUwFjC@ballast.proxy.rlwy.net:21403/railway'
+
+# Alternative: individual parameters (comment out DATABASE_URL above if using this)
+# DB_CONFIG = {
+#     'host': 'ballast.proxy.rlwy.net',
+#     'port': 21403,
+#     'database': 'railway',
+#     'user': 'postgres',
+#     'password': 'JNwCjKyNCIMuVXlzubdgMEvRJiJUwFjC'
+# }
 
 # API configuration
 API_BASE_URL = 'https://data-api.polymarket.com/trades'
@@ -50,7 +53,11 @@ class PolymarketScraper:
     def connect_db(self):
         """Establish database connection"""
         try:
-            self.conn = psycopg2.connect(**DB_CONFIG)
+            # Use DATABASE_URL if defined, otherwise use DB_CONFIG
+            if 'DATABASE_URL' in globals() and DATABASE_URL:
+                self.conn = psycopg2.connect(DATABASE_URL)
+            else:
+                self.conn = psycopg2.connect(**DB_CONFIG)
             self.cursor = self.conn.cursor()
             logger.info("Successfully connected to PostgreSQL database")
         except psycopg2.Error as e:
