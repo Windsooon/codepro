@@ -1,25 +1,21 @@
 'use client'
 
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback } from 'react'
 import {
   ReactFlow,
-  Node,
-  Edge,
-  addEdge,
-  Connection,
   useNodesState,
   useEdgesState,
+  addEdge,
   Controls,
   Background,
   BackgroundVariant,
-  NodeTypes,
   Handle,
   Position,
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
 
 // Custom Decision Node Component
-const DecisionNode = ({ data }: { data: any }) => {
+const DecisionNode = ({ data }) => {
   return (
     <div className="px-4 py-3 shadow-lg rounded-lg bg-blue-100 border-2 border-blue-300 min-w-[200px]">
       <Handle type="target" position={Position.Top} className="w-3 h-3" />
@@ -37,10 +33,10 @@ const DecisionNode = ({ data }: { data: any }) => {
   )
 }
 
-// Custom Leaf Node Component for final solutions
-const LeafNode = ({ data }: { data: any }) => {
+// Custom Leaf Node Component
+const LeafNode = ({ data }) => {
   return (
-    <div className="px-4 py-3 shadow-lg rounded-xl bg-green-100 border-2 border-green-300 min-w-[280px] max-w-[320px]">
+    <div className="px-4 py-3 shadow-lg rounded-xl bg-green-100 border-2 border-green-300 min-w-[300px] max-w-[350px]">
       <Handle type="target" position={Position.Top} className="w-3 h-3" />
       <div className="text-center">
         <div className="text-sm font-bold text-green-800 mb-2">{data.technique}</div>
@@ -50,18 +46,20 @@ const LeafNode = ({ data }: { data: any }) => {
         </div>
         <div className="text-xs text-green-600">
           <div className="font-semibold mb-1">LeetCode Problems:</div>
-          {data.problems.map((problem: any, index: number) => (
-            <div key={index} className="mb-1">
-              <a 
-                href={problem.url} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-blue-600 hover:text-blue-800 underline"
-              >
-                {problem.number}. {problem.title}
-              </a>
-            </div>
-          ))}
+          <div className="max-h-32 overflow-y-auto">
+            {data.problems.map((problem, index) => (
+              <div key={index} className="mb-1">
+                <a 
+                  href={problem.url} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:text-blue-800 underline"
+                >
+                  {problem.number}. {problem.title}
+                </a>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -69,7 +67,7 @@ const LeafNode = ({ data }: { data: any }) => {
 }
 
 // Root Node Component
-const RootNode = ({ data }: { data: any }) => {
+const RootNode = ({ data }) => {
   return (
     <div className="px-6 py-4 shadow-lg rounded-full bg-purple-100 border-3 border-purple-400 min-w-[200px]">
       <div className="text-center">
@@ -80,15 +78,15 @@ const RootNode = ({ data }: { data: any }) => {
   )
 }
 
-const nodeTypes: NodeTypes = {
+const nodeTypes = {
   decision: DecisionNode,
   leaf: LeafNode,
   root: RootNode,
 }
 
-export default function TwoPointerTreePage() {
-  // Define the decision tree structure
-  const initialNodes: Node[] = [
+export default function TwoPointerTree() {
+  // Define the decision tree structure with many more popular problems
+  const initialNodes = [
     // Root
     {
       id: 'root',
@@ -108,7 +106,7 @@ export default function TwoPointerTreePage() {
       }
     },
     
-    // Level 2: Target/Sum - Sorted branch
+    // Level 2: Target/Sum branches
     {
       id: 'sorted-target',
       type: 'decision', 
@@ -119,7 +117,6 @@ export default function TwoPointerTreePage() {
       }
     },
     
-    // Level 2: Target/Sum - Unsorted branch
     {
       id: 'unsorted-target',
       type: 'decision',
@@ -130,7 +127,7 @@ export default function TwoPointerTreePage() {
       }
     },
     
-    // Level 3: Pointer Movement - Sorted + Target
+    // Level 3: More specific decisions
     {
       id: 'sorted-target-movement',
       type: 'decision',
@@ -141,7 +138,6 @@ export default function TwoPointerTreePage() {
       }
     },
     
-    // Level 3: In-place modification - Sorted + No Target  
     {
       id: 'sorted-notarget-inplace',
       type: 'decision',
@@ -152,7 +148,6 @@ export default function TwoPointerTreePage() {
       }
     },
     
-    // Level 3: Data type - Unsorted + Target
     {
       id: 'unsorted-target-datatype',
       type: 'decision',
@@ -163,7 +158,6 @@ export default function TwoPointerTreePage() {
       }
     },
     
-    // Level 3: Data type - Unsorted + No Target
     {
       id: 'unsorted-notarget-datatype',
       type: 'decision',
@@ -174,7 +168,7 @@ export default function TwoPointerTreePage() {
       }
     },
     
-    // Leaf Nodes with Solutions
+    // Leaf Nodes with MANY MORE popular LeetCode problems
     {
       id: 'leaf1',
       type: 'leaf',
@@ -183,12 +177,15 @@ export default function TwoPointerTreePage() {
         technique: 'Two Sum Pattern (Opposite Pointers)',
         dataStructures: 'Array, Hash Map (optional)',
         complexity: 'O(n) time, O(1) space',
-                 problems: [
-           { number: 15, title: '3Sum', url: 'https://leetcode.com/problems/3sum/' },
-           { number: 16, title: '3Sum Closest', url: 'https://leetcode.com/problems/3sum-closest/' },
-           { number: 18, title: '4Sum', url: 'https://leetcode.com/problems/4sum/' },
-           { number: 167, title: 'Two Sum II - Input Array Is Sorted', url: 'https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/' }
-         ]
+        problems: [
+          { number: 1, title: 'Two Sum', url: 'https://leetcode.com/problems/two-sum/' },
+          { number: 15, title: '3Sum', url: 'https://leetcode.com/problems/3sum/' },
+          { number: 16, title: '3Sum Closest', url: 'https://leetcode.com/problems/3sum-closest/' },
+          { number: 18, title: '4Sum', url: 'https://leetcode.com/problems/4sum/' },
+          { number: 167, title: 'Two Sum II - Input Array Is Sorted', url: 'https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/' },
+          { number: 259, title: '3Sum Smaller', url: 'https://leetcode.com/problems/3sum-smaller/' },
+          { number: 1, title: 'Two Sum', url: 'https://leetcode.com/problems/two-sum/' }
+        ]
       }
     },
     
@@ -198,10 +195,15 @@ export default function TwoPointerTreePage() {
       position: { x: 250, y: 600 },
       data: {
         technique: 'Fast-Slow Pointers',
-        dataStructures: 'Array',
+        dataStructures: 'Array, Linked List',
         complexity: 'O(n) time, O(1) space',
         problems: [
-          { number: 19, title: 'Remove Nth Node From End', url: 'https://leetcode.com/problems/remove-nth-node-from-end-of-list/' }
+          { number: 19, title: 'Remove Nth Node From End', url: 'https://leetcode.com/problems/remove-nth-node-from-end-of-list/' },
+          { number: 141, title: 'Linked List Cycle', url: 'https://leetcode.com/problems/linked-list-cycle/' },
+          { number: 142, title: 'Linked List Cycle II', url: 'https://leetcode.com/problems/linked-list-cycle-ii/' },
+          { number: 876, title: 'Middle of the Linked List', url: 'https://leetcode.com/problems/middle-of-the-linked-list/' },
+          { number: 234, title: 'Palindrome Linked List', url: 'https://leetcode.com/problems/palindrome-linked-list/' },
+          { number: 287, title: 'Find the Duplicate Number', url: 'https://leetcode.com/problems/find-the-duplicate-number/' }
         ]
       }
     },
@@ -216,7 +218,11 @@ export default function TwoPointerTreePage() {
         complexity: 'O(n) time, O(1) space',
         problems: [
           { number: 26, title: 'Remove Duplicates from Sorted Array', url: 'https://leetcode.com/problems/remove-duplicates-from-sorted-array/' },
-          { number: 27, title: 'Remove Element', url: 'https://leetcode.com/problems/remove-element/' }
+          { number: 27, title: 'Remove Element', url: 'https://leetcode.com/problems/remove-element/' },
+          { number: 80, title: 'Remove Duplicates from Sorted Array II', url: 'https://leetcode.com/problems/remove-duplicates-from-sorted-array-ii/' },
+          { number: 283, title: 'Move Zeroes', url: 'https://leetcode.com/problems/move-zeroes/' },
+          { number: 75, title: 'Sort Colors', url: 'https://leetcode.com/problems/sort-colors/' },
+          { number: 88, title: 'Merge Sorted Array', url: 'https://leetcode.com/problems/merge-sorted-array/' }
         ]
       }
     },
@@ -230,7 +236,11 @@ export default function TwoPointerTreePage() {
         dataStructures: 'Array, Hash Map',
         complexity: 'O(n) time, O(k) space',
         problems: [
-          { number: 28, title: 'Find First Occurrence in String', url: 'https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/' }
+          { number: 28, title: 'Find First Occurrence in String', url: 'https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/' },
+          { number: 209, title: 'Minimum Size Subarray Sum', url: 'https://leetcode.com/problems/minimum-size-subarray-sum/' },
+          { number: 713, title: 'Subarray Product Less Than K', url: 'https://leetcode.com/problems/subarray-product-less-than-k/' },
+          { number: 904, title: 'Fruit Into Baskets', url: 'https://leetcode.com/problems/fruit-into-baskets/' },
+          { number: 930, title: 'Binary Subarrays With Sum', url: 'https://leetcode.com/problems/binary-subarrays-with-sum/' }
         ]
       }
     },
@@ -244,25 +254,33 @@ export default function TwoPointerTreePage() {
         dataStructures: 'String',
         complexity: 'O(n²) time, O(1) space',
         problems: [
-          { number: 5, title: 'Longest Palindromic Substring', url: 'https://leetcode.com/problems/longest-palindromic-substring/' }
+          { number: 5, title: 'Longest Palindromic Substring', url: 'https://leetcode.com/problems/longest-palindromic-substring/' },
+          { number: 647, title: 'Palindromic Substrings', url: 'https://leetcode.com/problems/palindromic-substrings/' },
+          { number: 125, title: 'Valid Palindrome', url: 'https://leetcode.com/problems/valid-palindrome/' },
+          { number: 680, title: 'Valid Palindrome II', url: 'https://leetcode.com/problems/valid-palindrome-ii/' },
+          { number: 9, title: 'Palindrome Number', url: 'https://leetcode.com/problems/palindrome-number/' }
         ]
       }
     },
     
-         {
-       id: 'leaf6',
-       type: 'leaf',
-       position: { x: 850, y: 600 },
-       data: {
-         technique: 'Sliding Window (Variable Size)',
-         dataStructures: 'Array, Hash Map',
-         complexity: 'O(n) time, O(k) space',
-         problems: [
-           { number: 3, title: 'Longest Substring Without Repeating', url: 'https://leetcode.com/problems/longest-substring-without-repeating-characters/' },
-           { number: 76, title: 'Minimum Window Substring', url: 'https://leetcode.com/problems/minimum-window-substring/' }
-         ]
-       }
-     },
+    {
+      id: 'leaf6',
+      type: 'leaf',
+      position: { x: 850, y: 600 },
+      data: {
+        technique: 'Sliding Window (Variable Size)',
+        dataStructures: 'Array, Hash Map',
+        complexity: 'O(n) time, O(k) space',
+        problems: [
+          { number: 3, title: 'Longest Substring Without Repeating', url: 'https://leetcode.com/problems/longest-substring-without-repeating-characters/' },
+          { number: 76, title: 'Minimum Window Substring', url: 'https://leetcode.com/problems/minimum-window-substring/' },
+          { number: 159, title: 'Longest Substring with At Most Two Distinct Characters', url: 'https://leetcode.com/problems/longest-substring-with-at-most-two-distinct-characters/' },
+          { number: 340, title: 'Longest Substring with At Most K Distinct Characters', url: 'https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters/' },
+          { number: 424, title: 'Longest Repeating Character Replacement', url: 'https://leetcode.com/problems/longest-repeating-character-replacement/' },
+          { number: 438, title: 'Find All Anagrams in a String', url: 'https://leetcode.com/problems/find-all-anagrams-in-a-string/' }
+        ]
+      }
+    },
     
     {
       id: 'leaf7',
@@ -273,28 +291,37 @@ export default function TwoPointerTreePage() {
         dataStructures: 'Array',
         complexity: 'O(n) time, O(1) space',
         problems: [
-          { number: 11, title: 'Container With Most Water', url: 'https://leetcode.com/problems/container-with-most-water/' }
+          { number: 11, title: 'Container With Most Water', url: 'https://leetcode.com/problems/container-with-most-water/' },
+          { number: 42, title: 'Trapping Rain Water', url: 'https://leetcode.com/problems/trapping-rain-water/' },
+          { number: 344, title: 'Reverse String', url: 'https://leetcode.com/problems/reverse-string/' },
+          { number: 345, title: 'Reverse Vowels of a String', url: 'https://leetcode.com/problems/reverse-vowels-of-a-string/' },
+          { number: 977, title: 'Squares of a Sorted Array', url: 'https://leetcode.com/problems/squares-of-a-sorted-array/' },
+          { number: 228, title: 'Summary Ranges', url: 'https://leetcode.com/problems/summary-ranges/' }
         ]
       }
     },
     
-         {
-       id: 'leaf8',
-       type: 'leaf',
-       position: { x: 1150, y: 600 },
-       data: {
-         technique: 'Dynamic Window/Partitioning',
-         dataStructures: 'Array, Stack',
-         complexity: 'O(n) time, O(n) space',
-         problems: [
-           { number: 42, title: 'Trapping Rain Water', url: 'https://leetcode.com/problems/trapping-rain-water/' },
-           { number: 977, title: 'Squares of Sorted Array', url: 'https://leetcode.com/problems/squares-of-a-sorted-array/' }
-         ]
-       }
-     }
+    {
+      id: 'leaf8',
+      type: 'leaf',
+      position: { x: 1150, y: 600 },
+      data: {
+        technique: 'Advanced Two-Pointer Patterns',
+        dataStructures: 'Array, Stack, Deque',
+        complexity: 'O(n) time, O(n) space',
+        problems: [
+          { number: 31, title: 'Next Permutation', url: 'https://leetcode.com/problems/next-permutation/' },
+          { number: 986, title: 'Interval List Intersections', url: 'https://leetcode.com/problems/interval-list-intersections/' },
+          { number: 845, title: 'Longest Mountain in Array', url: 'https://leetcode.com/problems/longest-mountain-in-array/' },
+          { number: 581, title: 'Shortest Unsorted Continuous Subarray', url: 'https://leetcode.com/problems/shortest-unsorted-continuous-subarray/' },
+          { number: 1750, title: 'Minimum Length of String After Deleting Similar Ends', url: 'https://leetcode.com/problems/minimum-length-of-string-after-deleting-similar-ends/' },
+          { number: 2537, title: 'Count the Number of Good Subarrays', url: 'https://leetcode.com/problems/count-the-number-of-good-subarrays/' }
+        ]
+      }
+    }
   ]
 
-  const initialEdges: Edge[] = [
+  const initialEdges = [
     // Root to Level 1
     { id: 'e1', source: 'root', target: 'sorted', animated: true },
     
@@ -323,12 +350,12 @@ export default function TwoPointerTreePage() {
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
 
   const onConnect = useCallback(
-    (params: Connection) => setEdges((eds) => addEdge(params, eds)),
+    (params) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
   )
 
   return (
-    <div className="w-full h-screen">
+    <div style={{ width: '100vw', height: '100vh' }}>
       <div className="p-4 bg-gray-100 border-b">
         <h1 className="text-2xl font-bold text-gray-800">Two-Pointer Problems Decision Tree</h1>
         <p className="text-gray-600 mt-1">Navigate through decision points to find the right technique for your problem</p>
@@ -340,7 +367,7 @@ export default function TwoPointerTreePage() {
         </div>
       </div>
       
-      <div className="w-full h-full">
+      <div style={{ width: '100%', height: 'calc(100vh - 140px)' }}>
         <ReactFlow
           nodes={nodes}
           edges={edges}
