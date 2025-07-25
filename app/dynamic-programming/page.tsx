@@ -122,8 +122,8 @@ export default function DynamicProgrammingTree() {
         type: 'decision',
         position: { x: 800, y: 180 },
         data: { 
-          label: 'What type of data are you working with?',
-          tooltip: 'Choose based on the input structure of your problem'
+          label: 'Is your problem working with sequences or arrays?',
+          tooltip: 'Single array/list problems vs other data structures'
         }
       },
 
@@ -155,8 +155,8 @@ export default function DynamicProgrammingTree() {
         type: 'decision',
         position: { x: 1200, y: 320 },
         data: { 
-          label: 'Working with strings or making choices?',
-          tooltip: 'String manipulation or item selection problems'
+          label: 'Does your problem involve string manipulation?',
+          tooltip: 'String problems vs item selection/choice problems'
         }
       },
 
@@ -166,8 +166,8 @@ export default function DynamicProgrammingTree() {
         type: 'decision',
         position: { x: 1000, y: 460 },
         data: { 
-          label: 'Comparing two strings or one string?',
-          tooltip: 'Single string problems vs two string comparison'
+          label: 'Are you comparing two strings?',
+          tooltip: 'Two string comparison vs single string manipulation'
         }
       },
 
@@ -188,8 +188,8 @@ export default function DynamicProgrammingTree() {
         type: 'decision',
         position: { x: 600, y: 460 },
         data: { 
-          label: 'Tree structures or complex states?',
-          tooltip: 'Advanced DP patterns for trees or state machines'
+          label: 'Does your problem involve tree structures?',
+          tooltip: 'Tree-based problems vs state machine/complex state problems'
         }
       },
 
@@ -484,26 +484,26 @@ export default function DynamicProgrammingTree() {
       { id: 'e1', source: 'root', target: 'problem-type', animated: true },
       
       // Level 1 to Level 2
-      { id: 'e2', source: 'problem-type', sourceHandle: 'yes', target: 'sequence-type', label: 'Sequences/Arrays', style: { stroke: '#10b981' } },
-      { id: 'e3', source: 'problem-type', sourceHandle: 'no', target: 'grid-type', label: 'Grids/Matrices', style: { stroke: '#ef4444' } },
+      { id: 'e2', source: 'problem-type', sourceHandle: 'yes', target: 'sequence-type', label: 'Yes', style: { stroke: '#10b981' } },
+      { id: 'e3', source: 'problem-type', sourceHandle: 'no', target: 'grid-type', label: 'No', style: { stroke: '#ef4444' } },
       
       // Additional branches from problem-type
-      { id: 'e3b', source: 'grid-type', sourceHandle: 'no', target: 'string-choice', label: 'Other types', style: { stroke: '#ef4444' } },
+      { id: 'e3b', source: 'grid-type', sourceHandle: 'no', target: 'string-choice', label: 'No', style: { stroke: '#ef4444' } },
       
       // Level 2 to Level 3 and Leaves
       { id: 'e4', source: 'sequence-type', sourceHandle: 'yes', target: 'leaf1', label: 'Yes', style: { stroke: '#10b981' } },
       { id: 'e5', source: 'sequence-type', sourceHandle: 'no', target: 'advanced-type', label: 'No', style: { stroke: '#ef4444' } },
       { id: 'e6', source: 'grid-type', sourceHandle: 'yes', target: 'leaf2', label: 'Yes', style: { stroke: '#10b981' } },
-      { id: 'e7', source: 'string-choice', sourceHandle: 'yes', target: 'string-operation', label: 'Strings', style: { stroke: '#10b981' } },
-      { id: 'e8', source: 'string-choice', sourceHandle: 'no', target: 'choice-type', label: 'Choices', style: { stroke: '#ef4444' } },
+      { id: 'e7', source: 'string-choice', sourceHandle: 'yes', target: 'string-operation', label: 'Yes', style: { stroke: '#10b981' } },
+      { id: 'e8', source: 'string-choice', sourceHandle: 'no', target: 'choice-type', label: 'No', style: { stroke: '#ef4444' } },
       
       // Level 3 to Leaves
-      { id: 'e9', source: 'string-operation', sourceHandle: 'yes', target: 'leaf3', label: 'Two strings', style: { stroke: '#10b981' } },
-      { id: 'e10', source: 'string-operation', sourceHandle: 'no', target: 'leaf4', label: 'One string', style: { stroke: '#ef4444' } },
+      { id: 'e9', source: 'string-operation', sourceHandle: 'yes', target: 'leaf3', label: 'Yes', style: { stroke: '#10b981' } },
+      { id: 'e10', source: 'string-operation', sourceHandle: 'no', target: 'leaf4', label: 'No', style: { stroke: '#ef4444' } },
       { id: 'e11', source: 'choice-type', sourceHandle: 'yes', target: 'leaf6', label: 'Yes', style: { stroke: '#10b981' } },
       { id: 'e12', source: 'choice-type', sourceHandle: 'no', target: 'leaf5', label: 'No', style: { stroke: '#ef4444' } },
-      { id: 'e13', source: 'advanced-type', sourceHandle: 'yes', target: 'leaf7', label: 'Trees', style: { stroke: '#10b981' } },
-      { id: 'e14', source: 'advanced-type', sourceHandle: 'no', target: 'leaf8', label: 'States', style: { stroke: '#ef4444' } },
+      { id: 'e13', source: 'advanced-type', sourceHandle: 'yes', target: 'leaf7', label: 'Yes', style: { stroke: '#10b981' } },
+      { id: 'e14', source: 'advanced-type', sourceHandle: 'no', target: 'leaf8', label: 'No', style: { stroke: '#ef4444' } },
       
       // Additional advanced techniques (connected directly from root for now)
       { id: 'e15', source: 'sequence-type', target: 'leaf9', label: 'Intervals', style: { stroke: '#8b5cf6' } },
