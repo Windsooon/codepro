@@ -33,10 +33,10 @@ const DecisionNode = ({ data }) => {
   )
 }
 
-// Custom Leaf Node Component
+// Custom Leaf Node Component (No code templates)
 const LeafNode = ({ data }) => {
   return (
-    <div className="px-4 py-3 shadow-lg rounded-xl bg-green-100 border-2 border-green-300 min-w-[350px] max-w-[400px]">
+    <div className="px-4 py-3 shadow-lg rounded-xl bg-green-100 border-2 border-green-300 min-w-[300px] max-w-[350px]">
       <Handle type="target" position={Position.Top} className="w-3 h-3" />
       <div className="text-center">
         <div className="text-sm font-bold text-green-800 mb-2">{data.technique}</div>
@@ -45,14 +45,20 @@ const LeafNode = ({ data }) => {
           <div><strong>Complexity:</strong> {data.complexity}</div>
           <div><strong>Keywords:</strong> {data.keywords}</div>
         </div>
-        {data.codeSnippet && (
-          <div className="text-xs text-gray-800 mb-2 bg-gray-50 p-2 rounded">
-            <div className="font-semibold mb-1">Template:</div>
-            <pre className="whitespace-pre-wrap text-left">{data.codeSnippet}</pre>
-          </div>
-        )}
-        <div className="text-xs text-green-600">
-          <div className="font-semibold mb-1">LeetCode Problems:</div>
+      </div>
+      <Handle type="source" position={Position.Bottom} className="w-3 h-3" />
+    </div>
+  )
+}
+
+// New Problem Node Component
+const ProblemNode = ({ data }) => {
+  return (
+    <div className="px-4 py-3 shadow-lg rounded-lg bg-orange-100 border-2 border-orange-300 min-w-[350px] max-w-[400px]">
+      <Handle type="target" position={Position.Top} className="w-3 h-3" />
+      <div className="text-center">
+        <div className="text-sm font-bold text-orange-800 mb-2">LeetCode Problems</div>
+        <div className="text-xs text-orange-600">
           <div className="max-h-32 overflow-y-auto">
             {data.problems.map((problem, index) => (
               <div key={index} className="mb-1 flex justify-between">
@@ -95,6 +101,7 @@ const RootNode = ({ data }) => {
 const nodeTypes = {
   decision: DecisionNode,
   leaf: LeafNode,
+  problem: ProblemNode,
   root: RootNode,
 }
 
@@ -180,7 +187,7 @@ export default function TwoPointerTree() {
           }
         },
     
-        // Leaf Nodes
+        // Leaf Nodes (Techniques only, no code templates)
         {
           id: 'leaf1',
           type: 'leaf',
@@ -189,21 +196,7 @@ export default function TwoPointerTree() {
             technique: 'Two Sum (Opposite Pointers)',
             dataStructures: 'Sorted Array',
             complexity: 'O(n) time, O(1) space',
-            keywords: 'sum, target, pairs, sorted',
-            codeSnippet: `left, right = 0, len(arr) - 1
-while left < right:
-    if arr[left] + arr[right] == target:
-        return [left, right]
-    elif arr[left] + arr[right] < target:
-        left += 1
-    else:
-        right -= 1`,
-            problems: [
-              { number: 167, title: 'Two Sum II - Input Array Is Sorted', url: 'https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/', difficulty: 'Medium' },
-              { number: 15, title: '3Sum', url: 'https://leetcode.com/problems/3sum/', difficulty: 'Medium' },
-              { number: 16, title: '3Sum Closest', url: 'https://leetcode.com/problems/3sum-closest/', difficulty: 'Medium' },
-              { number: 18, title: '4Sum', url: 'https://leetcode.com/problems/4sum/', difficulty: 'Medium' },
-            ]
+            keywords: 'sum, target, pairs, sorted'
           }
         },
     
@@ -215,17 +208,7 @@ while left < right:
             technique: 'Hash Map Two Sum',
             dataStructures: 'Array, Hash Map',
             complexity: 'O(n) time, O(n) space',
-            keywords: 'sum, target, unsorted, hash',
-            codeSnippet: `seen = {}
-for i, num in enumerate(arr):
-    complement = target - num
-    if complement in seen:
-        return [seen[complement], i]
-    seen[num] = i`,
-            problems: [
-              { number: 1, title: 'Two Sum', url: 'https://leetcode.com/problems/two-sum/', difficulty: 'Easy' },
-              { number: 454, title: '4Sum II', url: 'https://leetcode.com/problems/4sum-ii/', difficulty: 'Medium' },
-            ]
+            keywords: 'sum, target, unsorted, hash'
           }
         },
     
@@ -237,17 +220,7 @@ for i, num in enumerate(arr):
             technique: 'Fixed Window Sliding Window',
             dataStructures: 'Array, Deque',
             complexity: 'O(n) time, O(k) space',
-            keywords: 'subarray, fixed size, window, k elements',
-            codeSnippet: `window_sum = sum(arr[:k])
-max_sum = window_sum
-for i in range(k, len(arr)):
-    window_sum += arr[i] - arr[i-k]
-    max_sum = max(max_sum, window_sum)`,
-            problems: [
-              { number: 239, title: 'Sliding Window Maximum', url: 'https://leetcode.com/problems/sliding-window-maximum/', difficulty: 'Hard' },
-              { number: 438, title: 'Find All Anagrams in a String', url: 'https://leetcode.com/problems/find-all-anagrams-in-a-string/', difficulty: 'Medium' },
-              { number: 567, title: 'Permutation in String', url: 'https://leetcode.com/problems/permutation-in-string/', difficulty: 'Medium' },
-            ]
+            keywords: 'subarray, fixed size, window, k elements'
           }
         },
         
@@ -259,22 +232,7 @@ for i in range(k, len(arr)):
             technique: 'Variable Window Sliding Window',
             dataStructures: 'Array, Hash Map',
             complexity: 'O(n) time, O(k) space',
-            keywords: 'substring, variable size, condition-based',
-            codeSnippet: `left = 0
-for right in range(len(arr)):
-    # expand window
-    add_to_window(arr[right])
-    while window_invalid():
-        # shrink window
-        remove_from_window(arr[left])
-        left += 1
-    update_result(right - left + 1)`,
-            problems: [
-              { number: 3, title: 'Longest Substring Without Repeating Characters', url: 'https://leetcode.com/problems/longest-substring-without-repeating-characters/', difficulty: 'Medium' },
-              { number: 76, title: 'Minimum Window Substring', url: 'https://leetcode.com/problems/minimum-window-substring/', difficulty: 'Hard' },
-              { number: 209, title: 'Minimum Size Subarray Sum', url: 'https://leetcode.com/problems/minimum-size-subarray-sum/', difficulty: 'Medium' },
-              { number: 424, title: 'Longest Repeating Character Replacement', url: 'https://leetcode.com/problems/longest-repeating-character-replacement/', difficulty: 'Medium' },
-            ]
+            keywords: 'substring, variable size, condition-based'
           }
         },
     
@@ -286,19 +244,7 @@ for right in range(len(arr)):
             technique: 'In-Place Array Modification',
             dataStructures: 'Array',
             complexity: 'O(n) time, O(1) space',
-            keywords: 'remove, duplicates, in-place, modify',
-            codeSnippet: `write_index = 0
-for read_index in range(len(arr)):
-    if should_keep(arr[read_index]):
-        arr[write_index] = arr[read_index]
-        write_index += 1
-return write_index`,
-            problems: [
-              { number: 26, title: 'Remove Duplicates from Sorted Array', url: 'https://leetcode.com/problems/remove-duplicates-from-sorted-array/', difficulty: 'Easy' },
-              { number: 27, title: 'Remove Element', url: 'https://leetcode.com/problems/remove-element/', difficulty: 'Easy' },
-              { number: 283, title: 'Move Zeroes', url: 'https://leetcode.com/problems/move-zeroes/', difficulty: 'Easy' },
-              { number: 75, title: 'Sort Colors', url: 'https://leetcode.com/problems/sort-colors/', difficulty: 'Medium' },
-            ]
+            keywords: 'remove, duplicates, in-place, modify'
           }
         },
         
@@ -310,20 +256,7 @@ return write_index`,
             technique: 'Fast-Slow Pointers (Floyd\'s)',
             dataStructures: 'Linked List, Array',
             complexity: 'O(n) time, O(1) space',
-            keywords: 'cycle, detection, linked list, fast slow',
-            codeSnippet: `slow = fast = head
-while fast and fast.next:
-    slow = slow.next
-    fast = fast.next.next
-    if slow == fast:
-        return True  # cycle detected
-return False`,
-            problems: [
-              { number: 141, title: 'Linked List Cycle', url: 'https://leetcode.com/problems/linked-list-cycle/', difficulty: 'Easy' },
-              { number: 142, title: 'Linked List Cycle II', url: 'https://leetcode.com/problems/linked-list-cycle-ii/', difficulty: 'Medium' },
-              { number: 876, title: 'Middle of the Linked List', url: 'https://leetcode.com/problems/middle-of-the-linked-list/', difficulty: 'Easy' },
-              { number: 287, title: 'Find the Duplicate Number', url: 'https://leetcode.com/problems/find-the-duplicate-number/', difficulty: 'Medium' },
-            ]
+            keywords: 'cycle, detection, linked list, fast slow'
           }
         },
         
@@ -335,16 +268,97 @@ return False`,
             technique: 'Linked List Position Finding',
             dataStructures: 'Linked List',
             complexity: 'O(n) time, O(1) space',
-            keywords: 'nth node, remove, position, linked list',
-            codeSnippet: `# Remove nth from end
-fast = head
-for _ in range(n):
-    fast = fast.next
-slow = head
-while fast.next:
-    slow = slow.next
-    fast = fast.next
-slow.next = slow.next.next`,
+            keywords: 'nth node, remove, position, linked list'
+          }
+        },
+
+        // Problem Nodes (Separate blocks for LeetCode problems)
+        {
+          id: 'problems1',
+          type: 'problem',
+          position: { x: 50, y: 620 },
+          data: {
+            problems: [
+              { number: 167, title: 'Two Sum II - Input Array Is Sorted', url: 'https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/', difficulty: 'Medium' },
+              { number: 15, title: '3Sum', url: 'https://leetcode.com/problems/3sum/', difficulty: 'Medium' },
+              { number: 16, title: '3Sum Closest', url: 'https://leetcode.com/problems/3sum-closest/', difficulty: 'Medium' },
+              { number: 18, title: '4Sum', url: 'https://leetcode.com/problems/4sum/', difficulty: 'Medium' },
+            ]
+          }
+        },
+    
+        {
+          id: 'problems2',
+          type: 'problem',
+          position: { x: 400, y: 620 },
+          data: {
+            problems: [
+              { number: 1, title: 'Two Sum', url: 'https://leetcode.com/problems/two-sum/', difficulty: 'Easy' },
+              { number: 454, title: '4Sum II', url: 'https://leetcode.com/problems/4sum-ii/', difficulty: 'Medium' },
+            ]
+          }
+        },
+    
+        {
+          id: 'problems3',
+          type: 'problem',
+          position: { x: 550, y: 880 },
+          data: {
+            problems: [
+              { number: 239, title: 'Sliding Window Maximum', url: 'https://leetcode.com/problems/sliding-window-maximum/', difficulty: 'Hard' },
+              { number: 438, title: 'Find All Anagrams in a String', url: 'https://leetcode.com/problems/find-all-anagrams-in-a-string/', difficulty: 'Medium' },
+              { number: 567, title: 'Permutation in String', url: 'https://leetcode.com/problems/permutation-in-string/', difficulty: 'Medium' },
+            ]
+          }
+        },
+        
+        {
+          id: 'problems4',
+          type: 'problem',
+          position: { x: 750, y: 880 },
+          data: {
+            problems: [
+              { number: 3, title: 'Longest Substring Without Repeating Characters', url: 'https://leetcode.com/problems/longest-substring-without-repeating-characters/', difficulty: 'Medium' },
+              { number: 76, title: 'Minimum Window Substring', url: 'https://leetcode.com/problems/minimum-window-substring/', difficulty: 'Hard' },
+              { number: 209, title: 'Minimum Size Subarray Sum', url: 'https://leetcode.com/problems/minimum-size-subarray-sum/', difficulty: 'Medium' },
+              { number: 424, title: 'Longest Repeating Character Replacement', url: 'https://leetcode.com/problems/longest-repeating-character-replacement/', difficulty: 'Medium' },
+            ]
+          }
+        },
+    
+        {
+          id: 'problems5',
+          type: 'problem',
+          position: { x: 850, y: 740 },
+          data: {
+            problems: [
+              { number: 26, title: 'Remove Duplicates from Sorted Array', url: 'https://leetcode.com/problems/remove-duplicates-from-sorted-array/', difficulty: 'Easy' },
+              { number: 27, title: 'Remove Element', url: 'https://leetcode.com/problems/remove-element/', difficulty: 'Easy' },
+              { number: 283, title: 'Move Zeroes', url: 'https://leetcode.com/problems/move-zeroes/', difficulty: 'Easy' },
+              { number: 75, title: 'Sort Colors', url: 'https://leetcode.com/problems/sort-colors/', difficulty: 'Medium' },
+            ]
+          }
+        },
+        
+        {
+          id: 'problems6',
+          type: 'problem',
+          position: { x: 950, y: 740 },
+          data: {
+            problems: [
+              { number: 141, title: 'Linked List Cycle', url: 'https://leetcode.com/problems/linked-list-cycle/', difficulty: 'Easy' },
+              { number: 142, title: 'Linked List Cycle II', url: 'https://leetcode.com/problems/linked-list-cycle-ii/', difficulty: 'Medium' },
+              { number: 876, title: 'Middle of the Linked List', url: 'https://leetcode.com/problems/middle-of-the-linked-list/', difficulty: 'Easy' },
+              { number: 287, title: 'Find the Duplicate Number', url: 'https://leetcode.com/problems/find-the-duplicate-number/', difficulty: 'Medium' },
+            ]
+          }
+        },
+        
+        {
+          id: 'problems7',
+          type: 'problem',
+          position: { x: 1150, y: 740 },
+          data: {
             problems: [
               { number: 19, title: 'Remove Nth Node From End', url: 'https://leetcode.com/problems/remove-nth-node-from-end-of-list/', difficulty: 'Medium' },
               { number: 61, title: 'Rotate List', url: 'https://leetcode.com/problems/rotate-list/', difficulty: 'Medium' },
@@ -377,6 +391,15 @@ slow.next = slow.next.next`,
         // Level 4 to Leaves
         { id: 'e12', source: 'window-type', sourceHandle: 'yes', target: 'leaf3', label: 'Yes', style: { stroke: '#10b981' } },
         { id: 'e13', source: 'window-type', sourceHandle: 'no', target: 'leaf4', label: 'No', style: { stroke: '#ef4444' } },
+
+        // Leaf nodes to Problem nodes
+        { id: 'e14', source: 'leaf1', target: 'problems1', style: { stroke: '#f97316' } },
+        { id: 'e15', source: 'leaf2', target: 'problems2', style: { stroke: '#f97316' } },
+        { id: 'e16', source: 'leaf3', target: 'problems3', style: { stroke: '#f97316' } },
+        { id: 'e17', source: 'leaf4', target: 'problems4', style: { stroke: '#f97316' } },
+        { id: 'e18', source: 'leaf5', target: 'problems5', style: { stroke: '#f97316' } },
+        { id: 'e19', source: 'leaf6', target: 'problems6', style: { stroke: '#f97316' } },
+        { id: 'e20', source: 'leaf7', target: 'problems7', style: { stroke: '#f97316' } },
       ]
     },
     
@@ -401,27 +424,37 @@ slow.next = slow.next.next`,
           }
         },
         
-        // Advanced Leaf Nodes with more patterns
+        // Advanced Leaf Nodes (No code templates)
         {
           id: 'advanced-leaf1',
           type: 'leaf',
-          position: { x: 200, y: 400 },
+          position: { x: 500, y: 400 },
           data: {
             technique: 'Multi-Sum with Sorting',
             dataStructures: 'Array, Hash Set',
             complexity: 'O(n^(k-1)) time, O(n) space',
-            keywords: 'k-sum, combinations, duplicates, sorting',
-            codeSnippet: `def kSum(nums, target, k):
-    nums.sort()
-    if k == 2:
-        return twoSum(nums, target)
-    result = []
-    for i in range(len(nums) - k + 1):
-        if i > 0 and nums[i] == nums[i-1]:
-            continue
-        for sub_result in kSum(nums[i+1:], target - nums[i], k-1):
-            result.append([nums[i]] + sub_result)
-    return result`,
+            keywords: 'k-sum, combinations, duplicates, sorting'
+          }
+        },
+        
+        {
+          id: 'advanced-leaf2',
+          type: 'leaf',
+          position: { x: 900, y: 400 },
+          data: {
+            technique: 'Advanced Sliding Window',
+            dataStructures: 'Array, Hash Map, Deque',
+            complexity: 'O(n) time, O(k) space',
+            keywords: 'minimum window, optimization, shrinking'
+          }
+        },
+
+        // Problem Nodes for Advanced View
+        {
+          id: 'advanced-problems1',
+          type: 'problem',
+          position: { x: 500, y: 540 },
+          data: {
             problems: [
               { number: 15, title: '3Sum', url: 'https://leetcode.com/problems/3sum/', difficulty: 'Medium' },
               { number: 16, title: '3Sum Closest', url: 'https://leetcode.com/problems/3sum-closest/', difficulty: 'Medium' },
@@ -432,38 +465,10 @@ slow.next = slow.next.next`,
         },
         
         {
-          id: 'advanced-leaf2',
-          type: 'leaf',
-          position: { x: 700, y: 400 },
+          id: 'advanced-problems2',
+          type: 'problem',
+          position: { x: 900, y: 540 },
           data: {
-            technique: 'Advanced Sliding Window',
-            dataStructures: 'Array, Hash Map, Deque',
-            complexity: 'O(n) time, O(k) space',
-            keywords: 'minimum window, optimization, shrinking',
-            codeSnippet: `def minWindow(s, t):
-    need, window = Counter(t), {}
-    left, right = 0, 0
-    valid, start, length = 0, 0, float('inf')
-    
-    while right < len(s):
-        c = s[right]
-        right += 1
-        if c in need:
-            window[c] = window.get(c, 0) + 1
-            if window[c] == need[c]:
-                valid += 1
-        
-        while valid == len(need):
-            if right - left < length:
-                start, length = left, right - left
-            d = s[left]
-            left += 1
-            if d in need:
-                if window[d] == need[d]:
-                    valid -= 1
-                window[d] -= 1
-    
-    return "" if length == float('inf') else s[start:start+length]`,
             problems: [
               { number: 76, title: 'Minimum Window Substring', url: 'https://leetcode.com/problems/minimum-window-substring/', difficulty: 'Hard' },
               { number: 209, title: 'Minimum Size Subarray Sum', url: 'https://leetcode.com/problems/minimum-size-subarray-sum/', difficulty: 'Medium' },
@@ -477,9 +482,13 @@ slow.next = slow.next.next`,
         // Root to Level 1
         { id: 'ae1', source: 'root', target: 'problem-category', animated: true },
         
-        // Level 1 to Leaves (simplified for demo)
+        // Level 1 to Leaves
         { id: 'ae2', source: 'problem-category', sourceHandle: 'yes', target: 'advanced-leaf1', label: 'Sum Problems', style: { stroke: '#10b981' } },
         { id: 'ae3', source: 'problem-category', sourceHandle: 'no', target: 'advanced-leaf2', label: 'Window Problems', style: { stroke: '#ef4444' } },
+        
+        // Leaf nodes to Problem nodes
+        { id: 'ae4', source: 'advanced-leaf1', target: 'advanced-problems1', style: { stroke: '#f97316' } },
+        { id: 'ae5', source: 'advanced-leaf2', target: 'advanced-problems2', style: { stroke: '#f97316' } },
       ]
     }
   }
@@ -510,7 +519,17 @@ slow.next = slow.next.next`,
       if (node.type === 'leaf') {
         const matchesSearch = 
           node.data.technique.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          node.data.keywords.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          node.data.keywords.toLowerCase().includes(searchTerm.toLowerCase())
+        
+        return {
+          ...node,
+          style: matchesSearch 
+            ? { ...node.style, border: '3px solid #f59e0b' }
+            : { ...node.style, opacity: 0.3 }
+        }
+      }
+      if (node.type === 'problem') {
+        const matchesSearch = 
           node.data.problems.some(problem => 
             problem.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
             problem.number.toString().includes(searchTerm)
@@ -570,7 +589,7 @@ slow.next = slow.next.next`,
         
         <div className="text-sm text-gray-500">
           <strong>How to use:</strong> Follow the decision path based on your problem characteristics. 
-          Each leaf node shows the technique, complexity, code template, and LeetCode problems.
+          Each technique node shows the complexity and data structures, with LeetCode problems in separate orange blocks.
           <br />
           <strong>Search:</strong> Use the search bar to highlight specific problems or keywords.
           <strong> Controls:</strong> Zoom with mouse wheel, pan by dragging.
