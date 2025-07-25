@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo, useRef } from 'react'
 import {
   ReactFlow,
   useNodesState,
@@ -11,6 +11,11 @@ import {
   BackgroundVariant,
   Handle,
   Position,
+  useReactFlow,
+  ReactFlowProvider,
+  Panel,
+  getNodesBounds,
+  getViewportForBounds,
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
 
@@ -105,7 +110,192 @@ const nodeTypes = {
   root: RootNode,
 }
 
-export default function DynamicProgrammingTree() {
+// Export function to download the flow as PNG
+const downloadPng = async (reactFlowInstance) => {
+  if (reactFlowInstance) {
+    try {
+      // Get the React Flow wrapper element
+      const rfWrapper = document.querySelector('.react-flow')
+      if (!rfWrapper) return
+
+      // Create a canvas element
+      const canvas = document.createElement('canvas')
+      const ctx = canvas.getContext('2d')
+      
+      // Set canvas size based on the wrapper
+      const bounds = rfWrapper.getBoundingClientRect()
+      canvas.width = bounds.width
+      canvas.height = bounds.height
+      
+      // Create an image from the current view
+      const dataUrl = await new Promise((resolve) => {
+        // Use foreignObject to render HTML content to SVG
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+        svg.setAttribute('width', bounds.width.toString())
+        svg.setAttribute('height', bounds.height.toString())
+        
+        const foreignObject = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject')
+        foreignObject.setAttribute('width', '100%')
+        foreignObject.setAttribute('height', '100%')
+        
+        const clonedWrapper = rfWrapper.cloneNode(true)
+        foreignObject.appendChild(clonedWrapper)
+        svg.appendChild(foreignObject)
+        
+        const svgData = new XMLSerializer().serializeToString(svg)
+        const img = new Image()
+        img.onload = () => {
+          ctx.drawImage(img, 0, 0)
+          resolve(canvas.toDataURL('image/png'))
+        }
+        img.src = 'data:image/svg+xml;base64,' + btoa(svgData)
+      })
+      
+      // Download the image
+      const link = document.createElement('a')
+      link.href = dataUrl
+      link.download = 'dynamic-programming-decision-tree.png'
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    } catch (error) {
+      console.error('Error exporting PNG:', error)
+      // Fallback to SVG export
+      downloadSvg(reactFlowInstance)
+    }
+  }
+}
+
+// Export function to download the flow as SVG
+const downloadSvg = (reactFlowInstance) => {
+  // Use React Flow's built-in screenshot functionality for SVG export
+  if (reactFlowInstance) {
+    // First, fit the view to show all nodes
+    reactFlowInstance.fitView({ padding: 50 })
+    
+    // Use HTML2Canvas or similar approach by creating a simplified SVG
+    const nodes = reactFlowInstance.getNodes()
+    const edges = reactFlowInstance.getEdges()
+    
+    // Calculate bounds
+    const bounds = nodes.reduce(
+      (acc, node) => ({
+        minX: Math.min(acc.minX, node.position.x),
+        minY: Math.min(acc.minY, node.position.y),
+        maxX: Math.max(acc.maxX, node.position.x + 400), // Approximate node width
+        maxY: Math.max(acc.maxY, node.position.y + 150), // Approximate node height
+      }),
+      { minX: Infinity, minY: Infinity, maxX: -Infinity, maxY: -Infinity }
+    )
+
+    const padding = 100
+    const width = bounds.maxX - bounds.minX + (2 * padding)
+    const height = bounds.maxY - bounds.minY + (2 * padding)
+    const offsetX = -bounds.minX + padding
+    const offsetY = -bounds.minY + padding
+
+    // Create basic SVG with simplified node representations
+    let svgContent = `<?xml version="1.0" encoding="UTF-8"?>
+<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .node-text { font-family: Arial, sans-serif; font-size: 12px; }
+      .node-title { font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; }
+      .decision-node { fill: #dbeafe; stroke: #3b82f6; stroke-width: 2; }
+      .leaf-node { fill: #dcfce7; stroke: #10b981; stroke-width: 2; }
+      .problem-node { fill: #fed7aa; stroke: #f97316; stroke-width: 2; }
+      .root-node { fill: #e9d5ff; stroke: #8b5cf6; stroke-width: 3; }
+      .edge-line { stroke: #6b7280; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#6b7280" />
+    </marker>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f9fafb"/>
+  
+  <!-- Title -->
+  <text x="${width/2}" y="40" text-anchor="middle" class="node-title" font-size="20" fill="#1f2937">
+    Dynamic Programming Decision Tree
+  </text>`
+
+    // Add edges first (so they appear behind nodes)
+    edges.forEach(edge => {
+      const sourceNode = nodes.find(n => n.id === edge.source)
+      const targetNode = nodes.find(n => n.id === edge.target)
+      
+      if (sourceNode && targetNode) {
+        const x1 = sourceNode.position.x + offsetX + 200 // Center of source node
+        const y1 = sourceNode.position.y + offsetY + 75
+        const x2 = targetNode.position.x + offsetX + 200 // Center of target node
+        const y2 = targetNode.position.y + offsetY + 75
+        
+        svgContent += `
+  <line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" class="edge-line" />
+  <text x="${(x1 + x2) / 2}" y="${(y1 + y2) / 2 - 5}" text-anchor="middle" class="node-text" fill="#374151">${edge.label || ''}</text>`
+      }
+    })
+
+    // Add nodes
+    nodes.forEach(node => {
+      const x = node.position.x + offsetX
+      const y = node.position.y + offsetY
+      let nodeClass = 'decision-node'
+      let nodeContent = ''
+      
+      if (node.type === 'root') {
+        nodeClass = 'root-node'
+        nodeContent = `
+  <ellipse cx="${x + 200}" cy="${y + 50}" rx="180" ry="40" class="${nodeClass}" />
+  <text x="${x + 200}" y="${y + 55}" text-anchor="middle" class="node-title" fill="#7c3aed">${node.data.label}</text>`
+      } else if (node.type === 'leaf') {
+        nodeClass = 'leaf-node'
+        nodeContent = `
+  <rect x="${x}" y="${y}" width="400" height="120" rx="10" class="${nodeClass}" />
+  <text x="${x + 200}" y="${y + 25}" text-anchor="middle" class="node-title" fill="#065f46">${node.data.technique}</text>
+  <text x="${x + 200}" y="${y + 45}" text-anchor="middle" class="node-text" fill="#065f46">${node.data.approach}</text>
+  <text x="${x + 200}" y="${y + 60}" text-anchor="middle" class="node-text" fill="#065f46">${node.data.complexity}</text>
+  <text x="${x + 200}" y="${y + 75}" text-anchor="middle" class="node-text" fill="#065f46">${node.data.useCases}</text>`
+      } else if (node.type === 'problem') {
+        nodeClass = 'problem-node'
+        const problems = node.data.problems.slice(0, 3) // Show first 3 problems
+        let problemText = problems.map((p, i) => `
+  <text x="${x + 200}" y="${y + 45 + (i * 15)}" text-anchor="middle" class="node-text" fill="#9a3412">${p.number}. ${p.title}</text>`).join('')
+        
+        nodeContent = `
+  <rect x="${x}" y="${y}" width="400" height="100" rx="8" class="${nodeClass}" />
+  <text x="${x + 200}" y="${y + 25}" text-anchor="middle" class="node-title" fill="#9a3412">LeetCode Problems</text>${problemText}`
+      } else {
+        // Decision node
+        nodeContent = `
+  <rect x="${x}" y="${y}" width="400" height="80" rx="8" class="${nodeClass}" />
+  <text x="${x + 200}" y="${y + 30}" text-anchor="middle" class="node-title" fill="#1e40af">${node.data.label}</text>
+  <text x="${x + 200}" y="${y + 50}" text-anchor="middle" class="node-text" fill="#1e40af">${node.data.tooltip || ''}</text>`
+      }
+      
+      svgContent += nodeContent
+    })
+
+    svgContent += '\n</svg>'
+
+    // Create blob and download
+    const blob = new Blob([svgContent], { type: 'image/svg+xml' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = 'dynamic-programming-decision-tree.svg'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+  }
+}
+
+// Main Flow Component
+function DynamicProgrammingFlow() {
+  const reactFlowInstance = useReactFlow()
+
   const patternData = {
     nodes: [
       // Root
@@ -538,6 +728,30 @@ export default function DynamicProgrammingTree() {
       <div className="p-4 bg-gray-100 border-b">
         <div className="flex justify-between items-center mb-2">
           <h1 className="text-2xl font-bold text-gray-800">Dynamic Programming Decision Tree</h1>
+          <div className="flex gap-2">
+            <button
+              onClick={() => downloadSvg(reactFlowInstance)}
+              className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg shadow-md transition-colors duration-200 flex items-center gap-2"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7,10 12,15 17,10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Export SVG
+            </button>
+            <button
+              onClick={() => downloadPng(reactFlowInstance)}
+              className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg shadow-md transition-colors duration-200 flex items-center gap-2"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21,15 16,10 5,21"/>
+              </svg>
+              Export PNG
+            </button>
+          </div>
         </div>
         
         <div className="text-sm text-gray-500">
@@ -546,7 +760,7 @@ export default function DynamicProgrammingTree() {
           <br />
           <strong>Coverage:</strong> 11 major DP patterns including 1D DP, Grid DP, Knapsack, String DP, Tree DP, State Machine, Interval DP, Bitmask DP, and Digit DP.
           <br />
-          <strong>Controls:</strong> Zoom with mouse wheel, pan by dragging.
+          <strong>Controls:</strong> Zoom with mouse wheel, pan by dragging. Use export buttons to save as SVG or PNG.
         </div>
       </div>
       
@@ -563,8 +777,44 @@ export default function DynamicProgrammingTree() {
         >
           <Controls />
           <Background variant={BackgroundVariant.Dots} gap={20} size={1} />
+          <Panel position="top-right">
+            <div className="flex gap-1">
+              <button
+                onClick={() => downloadSvg(reactFlowInstance)}
+                className="px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md shadow-md transition-colors duration-200 flex items-center gap-1 text-sm"
+                title="Export decision tree as SVG"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="7,10 12,15 17,10"/>
+                  <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                SVG
+              </button>
+              <button
+                onClick={() => downloadPng(reactFlowInstance)}
+                className="px-3 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md shadow-md transition-colors duration-200 flex items-center gap-1 text-sm"
+                title="Export decision tree as PNG"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                  <circle cx="8.5" cy="8.5" r="1.5"/>
+                  <polyline points="21,15 16,10 5,21"/>
+                </svg>
+                PNG
+              </button>
+            </div>
+          </Panel>
         </ReactFlow>
       </div>
     </div>
+  )
+}
+
+export default function DynamicProgrammingTree() {
+  return (
+    <ReactFlowProvider>
+      <DynamicProgrammingFlow />
+    </ReactFlowProvider>
   )
 }
