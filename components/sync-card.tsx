@@ -110,9 +110,23 @@ export function SyncCard({ onSyncComplete }: SyncCardProps) {
   }
 
   const handleSync = async () => {
+    // Check if authentication is configured
     if (!storageService.isAuthConfigured()) {
       // Open settings dialog automatically
       setIsSettingsOpen(true)
+      setAlertMessage({ 
+        type: 'info', 
+        message: 'Please configure your authentication credentials to start syncing.' 
+      })
+      return
+    }
+
+    // Prevent multiple concurrent syncs
+    if (isSyncing) {
+      setAlertMessage({ 
+        type: 'info', 
+        message: 'Sync is already in progress. Please wait for it to complete.' 
+      })
       return
     }
 
@@ -331,7 +345,7 @@ export function SyncCard({ onSyncComplete }: SyncCardProps) {
             ) : !isAuthConfigured ? (
               <>
                 <Settings className="h-4 w-4 mr-2" />
-                Configure & Sync
+                Setup Authentication
               </>
             ) : (
               <>
@@ -448,8 +462,15 @@ export function SyncCard({ onSyncComplete }: SyncCardProps) {
                     </AlertDescription>
                   </Alert>
                 </div>
-                <DialogFooter>
-                  <Button onClick={handleSaveAuth} className="w-full">
+                <DialogFooter className="gap-2">
+                  <Button 
+                    variant="outline" 
+                    onClick={() => setIsSettingsOpen(false)}
+                    className="flex-1"
+                  >
+                    Cancel
+                  </Button>
+                  <Button onClick={handleSaveAuth} className="flex-1">
                     Save Authentication
                   </Button>
                 </DialogFooter>

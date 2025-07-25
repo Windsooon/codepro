@@ -45,6 +45,7 @@ class SyncService {
   private readonly BATCH_SIZE = 20;
   private readonly DELAY_BETWEEN_REQUESTS = 4000; // 4 seconds
   private isCancelled = false;
+  private isSyncing = false;
 
   // Get authentication headers for the proxy
   private getProxyHeaders(): Record<string, string> {
@@ -142,17 +143,38 @@ class SyncService {
     this.isCancelled = false;
   }
 
+  // Check if sync is currently in progress
+  isSyncInProgress(): boolean {
+    return this.isSyncing;
+  }
+
   // Main sync function with progress callback
   async syncSubmissions(
     onProgress: (progress: SyncProgress) => void
   ): Promise<{ success: boolean; newSubmissions: number; totalSubmissions: number; error?: string }> {
     
+    // Prevent concurrent syncs
+    if (this.isSyncing) {
+      const error = 'Sync is already in progress. Please wait for it to complete.';
+      onProgress({
+        status: 'error',
+        currentOffset: 0,
+        totalFetched: 0,
+        newSubmissions: 0,
+        message: error,
+        error
+      });
+      return { success: false, newSubmissions: 0, totalSubmissions: 0, error };
+    }
+    
     // Reset cancellation state at the start
     this.resetCancellation();
+    this.isSyncing = true;
 
     // Check authentication
     if (!storageService.isAuthConfigured()) {
       const error = 'Authentication not configured. Please add your CSRF token and session cookie.';
+      this.isSyncing = false;
       onProgress({
         status: 'error',
         currentOffset: 0,
@@ -313,6 +335,7 @@ class SyncService {
           error: 'Sync cancelled by user'
         });
 
+        this.isSyncing = false;
         return {
           success: false,
           newSubmissions: totalNewSubmissions,
@@ -339,6 +362,7 @@ class SyncService {
         message: `Sync completed! Added ${totalNewSubmissions} new submissions.`
       });
 
+      this.isSyncing = false;
       return {
         success: true,
         newSubmissions: totalNewSubmissions,
@@ -363,6 +387,7 @@ class SyncService {
         error: errorMessage
       });
 
+      this.isSyncing = false;
       return {
         success: false,
         newSubmissions: totalNewSubmissions,

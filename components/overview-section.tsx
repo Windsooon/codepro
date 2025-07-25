@@ -875,7 +875,7 @@ export function OverviewSection() {
     
     // Check if auto-sync is needed (only for real data, not demo data)
     let autoSyncCompleted = false
-    if (!storageService.isDemoData() && storageService.isAuthConfigured()) {
+    if (!storageService.isDemoData() && storageService.isAuthConfigured() && !syncService.isSyncInProgress()) {
       const syncHistory = storageService.getSyncHistory()
       const now = Date.now()
       const twentyFourHoursAgo = now - (24 * 60 * 60 * 1000) // 24 hours in milliseconds
@@ -885,12 +885,21 @@ export function OverviewSection() {
         setIsAutoSyncing(true)
         
         try {
+          // Double-check authentication is still configured before starting auto-sync
+          const authConfig = storageService.getAuthConfig()
+          if (!authConfig?.csrftoken || !authConfig?.sessionCookie) {
+            // Authentication is not properly configured, skip auto-sync
+            setIsAutoSyncing(false)
+            return
+          }
+          
           const result = await syncService.syncSubmissions((progress) => {
             // Silent progress - we could show a minimal indicator if needed
           })
           autoSyncCompleted = result.success
         } catch (error) {
-          // Auto-sync failed
+          // Auto-sync failed - this is expected if auth is not configured
+          console.log('Auto-sync failed:', error)
         } finally {
           setIsAutoSyncing(false)
         }
