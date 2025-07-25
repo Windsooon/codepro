@@ -79,6 +79,16 @@ export function Navbar({ activeSection, onSectionChange }: NavbarProps) {
                 </Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
+            
+            {/* Dynamic Programming Decision Tree Link */}
+            <NavigationMenuItem>
+              <NavigationMenuLink asChild>
+                <Link href="/dynamic-programming" className={navigationMenuTriggerStyle()}>
+                  <GitBranch className="h-4 w-4 mr-2" />
+                  Dynamic Programming
+                </Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
       </div>
