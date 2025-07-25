@@ -33,19 +33,34 @@ const DecisionNode = ({ data }) => {
   )
 }
 
-// Custom Leaf Node Component
+// Custom Leaf Node Component (smaller, without embedded problems)
 const LeafNode = ({ data }) => {
   return (
-    <div className="px-4 py-3 shadow-lg rounded-xl bg-green-100 border-2 border-green-300 min-w-[300px] max-w-[350px]">
+    <div className="px-3 py-2 shadow-lg rounded-xl bg-green-100 border-2 border-green-300 min-w-[220px] max-w-[250px]">
       <Handle type="target" position={Position.Top} className="w-3 h-3" />
       <div className="text-center">
-        <div className="text-sm font-bold text-green-800 mb-2">{data.technique}</div>
-        <div className="text-xs text-green-700 mb-2">
+        <div className="text-sm font-bold text-green-800 mb-1">{data.technique}</div>
+        <div className="text-xs text-green-700">
           <div><strong>Data Structures:</strong> {data.dataStructures}</div>
           <div><strong>Complexity:</strong> {data.complexity}</div>
         </div>
-        <div className="text-xs text-green-600">
-          <div className="font-semibold mb-1">LeetCode Problems:</div>
+      </div>
+      <Handle type="source" position={Position.Bottom} className="w-3 h-3" />
+    </div>
+  )
+}
+
+// New LeetCode Problems Node Component
+const LeetCodeProblemsNode = ({ data }) => {
+  return (
+    <div className="px-3 py-2 shadow-lg rounded-lg bg-orange-50 border-2 border-orange-300 min-w-[280px] max-w-[320px]">
+      <Handle type="target" position={Position.Top} className="w-3 h-3" />
+      <div className="text-center">
+        <div className="text-sm font-semibold text-orange-800 mb-2 flex items-center justify-center">
+          <span className="mr-1">📋</span>
+          LeetCode Problems
+        </div>
+        <div className="text-xs text-orange-700">
           <div className="max-h-32 overflow-y-auto">
             {data.problems.map((problem, index) => (
               <div key={index} className="mb-1">
@@ -81,6 +96,7 @@ const RootNode = ({ data }) => {
 const nodeTypes = {
   decision: DecisionNode,
   leaf: LeafNode,
+  leetcode: LeetCodeProblemsNode,
   root: RootNode,
 }
 
@@ -168,7 +184,7 @@ export default function TwoPointerTree() {
       }
     },
     
-    // Leaf Nodes with MANY MORE popular LeetCode problems
+    // Leaf Nodes (smaller, without embedded problems)
     {
       id: 'leaf1',
       type: 'leaf',
@@ -176,16 +192,7 @@ export default function TwoPointerTree() {
       data: {
         technique: 'Two Sum Pattern (Opposite Pointers)',
         dataStructures: 'Array, Hash Map (optional)',
-        complexity: 'O(n) time, O(1) space',
-        problems: [
-          { number: 1, title: 'Two Sum', url: 'https://leetcode.com/problems/two-sum/' },
-          { number: 15, title: '3Sum', url: 'https://leetcode.com/problems/3sum/' },
-          { number: 16, title: '3Sum Closest', url: 'https://leetcode.com/problems/3sum-closest/' },
-          { number: 18, title: '4Sum', url: 'https://leetcode.com/problems/4sum/' },
-          { number: 167, title: 'Two Sum II - Input Array Is Sorted', url: 'https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/' },
-          { number: 259, title: '3Sum Smaller', url: 'https://leetcode.com/problems/3sum-smaller/' },
-          { number: 1, title: 'Two Sum', url: 'https://leetcode.com/problems/two-sum/' }
-        ]
+        complexity: 'O(n) time, O(1) space'
       }
     },
     
@@ -196,7 +203,98 @@ export default function TwoPointerTree() {
       data: {
         technique: 'Fast-Slow Pointers',
         dataStructures: 'Array, Linked List',
-        complexity: 'O(n) time, O(1) space',
+        complexity: 'O(n) time, O(1) space'
+      }
+    },
+    
+    {
+      id: 'leaf3',
+      type: 'leaf',
+      position: { x: 350, y: 600 },
+      data: {
+        technique: 'In-Place Array Modification',
+        dataStructures: 'Array',
+        complexity: 'O(n) time, O(1) space'
+      }
+    },
+    
+    {
+      id: 'leaf4',
+      type: 'leaf',
+      position: { x: 550, y: 600 },
+      data: {
+        technique: 'Sliding Window (Fixed Size)',
+        dataStructures: 'Array, Hash Map',
+        complexity: 'O(n) time, O(k) space'
+      }
+    },
+    
+    {
+      id: 'leaf5',
+      type: 'leaf',
+      position: { x: 650, y: 600 },
+      data: {
+        technique: 'Expand Around Centers',
+        dataStructures: 'String',
+        complexity: 'O(n²) time, O(1) space'
+      }
+    },
+    
+    {
+      id: 'leaf6',
+      type: 'leaf',
+      position: { x: 850, y: 600 },
+      data: {
+        technique: 'Sliding Window (Variable Size)',
+        dataStructures: 'Array, Hash Map',
+        complexity: 'O(n) time, O(k) space'
+      }
+    },
+    
+    {
+      id: 'leaf7',
+      type: 'leaf',
+      position: { x: 950, y: 600 },
+      data: {
+        technique: 'Opposite Direction (Greedy)',
+        dataStructures: 'Array',
+        complexity: 'O(n) time, O(1) space'
+      }
+    },
+    
+    {
+      id: 'leaf8',
+      type: 'leaf',
+      position: { x: 1150, y: 600 },
+      data: {
+        technique: 'Advanced Two-Pointer Patterns',
+        dataStructures: 'Array, Stack, Deque',
+        complexity: 'O(n) time, O(n) space'
+      }
+    },
+    
+    // LeetCode Problem Nodes (positioned below leaf nodes)
+    {
+      id: 'leetcode1',
+      type: 'leetcode',
+      position: { x: 50, y: 750 },
+      data: {
+        problems: [
+          { number: 1, title: 'Two Sum', url: 'https://leetcode.com/problems/two-sum/' },
+          { number: 15, title: '3Sum', url: 'https://leetcode.com/problems/3sum/' },
+          { number: 16, title: '3Sum Closest', url: 'https://leetcode.com/problems/3sum-closest/' },
+          { number: 18, title: '4Sum', url: 'https://leetcode.com/problems/4sum/' },
+          { number: 167, title: 'Two Sum II - Input Array Is Sorted', url: 'https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/' },
+          { number: 259, title: '3Sum Smaller', url: 'https://leetcode.com/problems/3sum-smaller/' }
+        ]
+      }
+    },
+    
+    {
+      id: 'leetcode2',
+      type: 'leetcode',
+      position: { x: 250, y: 750 },
+      data: {
         problems: [
           { number: 19, title: 'Remove Nth Node From End', url: 'https://leetcode.com/problems/remove-nth-node-from-end-of-list/' },
           { number: 141, title: 'Linked List Cycle', url: 'https://leetcode.com/problems/linked-list-cycle/' },
@@ -209,13 +307,10 @@ export default function TwoPointerTree() {
     },
     
     {
-      id: 'leaf3',
-      type: 'leaf',
-      position: { x: 350, y: 600 },
+      id: 'leetcode3',
+      type: 'leetcode',
+      position: { x: 350, y: 750 },
       data: {
-        technique: 'In-Place Array Modification',
-        dataStructures: 'Array',
-        complexity: 'O(n) time, O(1) space',
         problems: [
           { number: 26, title: 'Remove Duplicates from Sorted Array', url: 'https://leetcode.com/problems/remove-duplicates-from-sorted-array/' },
           { number: 27, title: 'Remove Element', url: 'https://leetcode.com/problems/remove-element/' },
@@ -228,31 +323,25 @@ export default function TwoPointerTree() {
     },
     
     {
-      id: 'leaf4',
-      type: 'leaf',
-      position: { x: 550, y: 600 },
+      id: 'leetcode4',
+      type: 'leetcode',
+      position: { x: 550, y: 750 },
       data: {
-        technique: 'Sliding Window (Same Direction)',
-        dataStructures: 'Array, Hash Map',
-        complexity: 'O(n) time, O(k) space',
         problems: [
-          { number: 28, title: 'Find First Occurrence in String', url: 'https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/' },
+          { number: 239, title: 'Sliding Window Maximum', url: 'https://leetcode.com/problems/sliding-window-maximum/' },
+          { number: 438, title: 'Find All Anagrams in a String', url: 'https://leetcode.com/problems/find-all-anagrams-in-a-string/' },
+          { number: 567, title: 'Permutation in String', url: 'https://leetcode.com/problems/permutation-in-string/' },
           { number: 209, title: 'Minimum Size Subarray Sum', url: 'https://leetcode.com/problems/minimum-size-subarray-sum/' },
-          { number: 713, title: 'Subarray Product Less Than K', url: 'https://leetcode.com/problems/subarray-product-less-than-k/' },
-          { number: 904, title: 'Fruit Into Baskets', url: 'https://leetcode.com/problems/fruit-into-baskets/' },
-          { number: 930, title: 'Binary Subarrays With Sum', url: 'https://leetcode.com/problems/binary-subarrays-with-sum/' }
+          { number: 713, title: 'Subarray Product Less Than K', url: 'https://leetcode.com/problems/subarray-product-less-than-k/' }
         ]
       }
     },
     
     {
-      id: 'leaf5',
-      type: 'leaf',
-      position: { x: 650, y: 600 },
+      id: 'leetcode5',
+      type: 'leetcode',
+      position: { x: 650, y: 750 },
       data: {
-        technique: 'Expand Around Centers',
-        dataStructures: 'String',
-        complexity: 'O(n²) time, O(1) space',
         problems: [
           { number: 5, title: 'Longest Palindromic Substring', url: 'https://leetcode.com/problems/longest-palindromic-substring/' },
           { number: 647, title: 'Palindromic Substrings', url: 'https://leetcode.com/problems/palindromic-substrings/' },
@@ -264,32 +353,25 @@ export default function TwoPointerTree() {
     },
     
     {
-      id: 'leaf6',
-      type: 'leaf',
-      position: { x: 850, y: 600 },
+      id: 'leetcode6',
+      type: 'leetcode',
+      position: { x: 850, y: 750 },
       data: {
-        technique: 'Sliding Window (Variable Size)',
-        dataStructures: 'Array, Hash Map',
-        complexity: 'O(n) time, O(k) space',
         problems: [
           { number: 3, title: 'Longest Substring Without Repeating', url: 'https://leetcode.com/problems/longest-substring-without-repeating-characters/' },
           { number: 76, title: 'Minimum Window Substring', url: 'https://leetcode.com/problems/minimum-window-substring/' },
           { number: 159, title: 'Longest Substring with At Most Two Distinct Characters', url: 'https://leetcode.com/problems/longest-substring-with-at-most-two-distinct-characters/' },
           { number: 340, title: 'Longest Substring with At Most K Distinct Characters', url: 'https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters/' },
-          { number: 424, title: 'Longest Repeating Character Replacement', url: 'https://leetcode.com/problems/longest-repeating-character-replacement/' },
-          { number: 438, title: 'Find All Anagrams in a String', url: 'https://leetcode.com/problems/find-all-anagrams-in-a-string/' }
+          { number: 424, title: 'Longest Repeating Character Replacement', url: 'https://leetcode.com/problems/longest-repeating-character-replacement/' }
         ]
       }
     },
     
     {
-      id: 'leaf7',
-      type: 'leaf',
-      position: { x: 950, y: 600 },
+      id: 'leetcode7',
+      type: 'leetcode',
+      position: { x: 950, y: 750 },
       data: {
-        technique: 'Opposite Direction (Greedy)',
-        dataStructures: 'Array',
-        complexity: 'O(n) time, O(1) space',
         problems: [
           { number: 11, title: 'Container With Most Water', url: 'https://leetcode.com/problems/container-with-most-water/' },
           { number: 42, title: 'Trapping Rain Water', url: 'https://leetcode.com/problems/trapping-rain-water/' },
@@ -302,13 +384,10 @@ export default function TwoPointerTree() {
     },
     
     {
-      id: 'leaf8',
-      type: 'leaf',
-      position: { x: 1150, y: 600 },
+      id: 'leetcode8',
+      type: 'leetcode',
+      position: { x: 1150, y: 750 },
       data: {
-        technique: 'Advanced Two-Pointer Patterns',
-        dataStructures: 'Array, Stack, Deque',
-        complexity: 'O(n) time, O(n) space',
         problems: [
           { number: 31, title: 'Next Permutation', url: 'https://leetcode.com/problems/next-permutation/' },
           { number: 986, title: 'Interval List Intersections', url: 'https://leetcode.com/problems/interval-list-intersections/' },
@@ -344,6 +423,16 @@ export default function TwoPointerTree() {
     { id: 'e13', source: 'unsorted-target-datatype', sourceHandle: 'no', target: 'leaf6', label: 'No', style: { stroke: '#ef4444' } },
     { id: 'e14', source: 'unsorted-notarget-datatype', sourceHandle: 'yes', target: 'leaf7', label: 'Yes', style: { stroke: '#10b981' } },
     { id: 'e15', source: 'unsorted-notarget-datatype', sourceHandle: 'no', target: 'leaf8', label: 'No', style: { stroke: '#ef4444' } },
+    
+    // Leaf nodes to LeetCode problem nodes
+    { id: 'e16', source: 'leaf1', target: 'leetcode1', style: { stroke: '#f97316', strokeDasharray: '5,5' } },
+    { id: 'e17', source: 'leaf2', target: 'leetcode2', style: { stroke: '#f97316', strokeDasharray: '5,5' } },
+    { id: 'e18', source: 'leaf3', target: 'leetcode3', style: { stroke: '#f97316', strokeDasharray: '5,5' } },
+    { id: 'e19', source: 'leaf4', target: 'leetcode4', style: { stroke: '#f97316', strokeDasharray: '5,5' } },
+    { id: 'e20', source: 'leaf5', target: 'leetcode5', style: { stroke: '#f97316', strokeDasharray: '5,5' } },
+    { id: 'e21', source: 'leaf6', target: 'leetcode6', style: { stroke: '#f97316', strokeDasharray: '5,5' } },
+    { id: 'e22', source: 'leaf7', target: 'leetcode7', style: { stroke: '#f97316', strokeDasharray: '5,5' } },
+    { id: 'e23', source: 'leaf8', target: 'leetcode8', style: { stroke: '#f97316', strokeDasharray: '5,5' } },
   ]
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
@@ -361,7 +450,7 @@ export default function TwoPointerTree() {
         <p className="text-gray-600 mt-1">Navigate through decision points to find the right technique for your problem</p>
         <div className="text-sm text-gray-500 mt-2">
           <strong>How to use:</strong> Start from the purple root node and follow the green "Yes" or red "No" paths based on your problem characteristics. 
-          Each green leaf node contains the recommended technique, data structures, complexity, and relevant LeetCode problems.
+          Each green leaf node contains the recommended technique and connects to orange LeetCode problem blocks below.
           <br />
           <strong>Controls:</strong> Zoom with mouse wheel, pan by dragging, and use the control panel in the bottom-left corner.
         </div>
