@@ -89,6 +89,16 @@ export function Navbar({ activeSection, onSectionChange }: NavbarProps) {
                 </Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
+            
+            {/* Graph Problems Decision Tree Link */}
+            <NavigationMenuItem>
+              <NavigationMenuLink asChild>
+                <Link href="/graph" className={navigationMenuTriggerStyle()}>
+                  <GitBranch className="h-4 w-4 mr-2" />
+                  Graph Problems
+                </Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
       </div>
