@@ -1470,22 +1470,7 @@ function GraphProblemsFlow() {
           </div>
         </div>
         
-        <div className="text-sm text-gray-500">
-          <strong>How to use:</strong> {viewType === 'problem-type' 
-            ? 'Follow the decision path based on your graph characteristics (weighted, directed, etc.)' 
-            : 'Follow the decision path based on algorithmic approach (BFS, DFS, Union-Find, etc.)'
-          }. 
-          Each green node shows a graph algorithm with approach and complexity, while orange nodes contain related LeetCode problems.
-          <br />
-          <strong>Current View:</strong> {viewType === 'problem-type' 
-            ? 'Categorization by Problem Type (shortest path, connectivity, traversal, etc.)' 
-            : 'Categorization by Algorithm Approach (BFS-based, DFS-based, Union-Find, etc.)'
-          }
-          <br />
-          <strong>Coverage:</strong> 15+ major graph algorithms including BFS/DFS, Shortest Path, MST, Topological Sort, Union-Find, SCC, and advanced techniques.
-          <br />
-          <strong>Controls:</strong> Use toggle buttons to switch views. Zoom with mouse wheel, pan by dragging. Use export buttons to save as SVG or PNG.
-        </div>
+
       </div>
       
               <div style={{ width: '100%', height: 'calc(100vh - 204px)' }}>

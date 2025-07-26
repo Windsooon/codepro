@@ -587,13 +587,7 @@ export default function TwoPointerTree() {
           <strong> Patterns:</strong> {isAdvanced ? '15+ detailed patterns' : '8 core patterns'}
         </p>
         
-        <div className="text-sm text-gray-500">
-          <strong>How to use:</strong> Follow the decision path based on your problem characteristics. 
-          Each technique node shows the complexity and data structures, with LeetCode problems in separate orange blocks.
-          <br />
-          <strong>Search:</strong> Use the search bar to highlight specific problems or keywords.
-          <strong> Controls:</strong> Zoom with mouse wheel, pan by dragging.
-        </div>
+
       </div>
       
       <div style={{ width: '100%', height: 'calc(100vh - 180px)' }}>

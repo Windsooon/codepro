@@ -2046,27 +2046,7 @@ function BinaryTreeFlow() {
           </div>
         </div>
         
-        <div className="text-sm text-gray-500">
-          <strong>How to use:</strong> {
-            viewType === 'problem-type' 
-              ? 'Follow the decision path based on what type of tree operation you need to perform.' 
-              : viewType === 'algorithm-approach'
-              ? 'Follow the decision path based on algorithmic approach (DFS, BFS, DP, etc.).'
-              : 'Follow the decision path based on tree characteristics (BST, balanced, etc.).'
-          } Each green node shows a binary tree algorithm with approach and complexity, while orange nodes contain related LeetCode problems.
-          <br />
-          <strong>Current View:</strong> {
-            viewType === 'problem-type' 
-              ? 'Categorization by Problem Type (traversal, construction, validation, etc.)' 
-              : viewType === 'algorithm-approach'
-              ? 'Categorization by Algorithm Approach (DFS-based, BFS-based, etc.)'
-              : 'Categorization by Tree Characteristics (BST, balanced, general, etc.)'
-          }
-          <br />
-          <strong>Coverage:</strong> 15+ major binary tree algorithms including traversals, construction, validation, LCA, and advanced techniques.
-          <br />
-          <strong>Controls:</strong> Use toggle buttons to switch views. Zoom with mouse wheel, pan by dragging. Use export buttons to save as SVG or PNG.
-        </div>
+
       </div>
       
               <div style={{ width: '100%', height: 'calc(100vh - 204px)' }}>

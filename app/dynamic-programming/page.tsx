@@ -755,14 +755,7 @@ function DynamicProgrammingFlow() {
           </div>
         </div>
         
-        <div className="text-sm text-gray-500">
-          <strong>How to use:</strong> Follow the decision path based on your problem characteristics. 
-          Each green node shows a DP technique with approach and complexity, while orange nodes contain related LeetCode problems.
-          <br />
-          <strong>Coverage:</strong> 11 major DP patterns including 1D DP, Grid DP, Knapsack, String DP, Tree DP, State Machine, Interval DP, Bitmask DP, and Digit DP.
-          <br />
-          <strong>Controls:</strong> Zoom with mouse wheel, pan by dragging. Use export buttons to save as SVG or PNG.
-        </div>
+
       </div>
       
               <div style={{ width: '100%', height: 'calc(100vh - 204px)' }}>

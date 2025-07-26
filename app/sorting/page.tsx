@@ -1282,27 +1282,7 @@ function SortingFlow() {
     [setEdges]
   )
 
-  const getViewDescription = () => {
-    switch(viewType) {
-      case 'algorithm-type':
-        return 'Follow the decision tree to find the right sorting algorithm based on strategy (divide-and-conquer vs others), memory constraints, stability requirements, and data characteristics.'
-      case 'complexity-class':
-        return 'Choose sorting algorithms based on time/space complexity requirements and performance guarantees.'
-      case 'problem-pattern':
-        return 'Select sorting approaches based on the specific problem pattern: array sorting, custom objects, partial sorting, or specialized constraints.'
-      default:
-        return ''
-    }
-  }
 
-  const getCurrentViewTitle = () => {
-    switch(viewType) {
-      case 'algorithm-type': return 'Algorithm Type View - Categorizes by strategy, memory usage, and stability'
-      case 'complexity-class': return 'Complexity Class View - Categorizes by time/space complexity'
-      case 'problem-pattern': return 'Problem Pattern View - Categorizes by sorting problem type'
-      default: return ''
-    }
-  }
 
   return (
     <div style={{ width: '100vw', height: 'calc(100vh - 64px)' }}>
@@ -1364,17 +1344,7 @@ function SortingFlow() {
             </button>
           </div>
         </div>
-        <div className="text-sm text-gray-500">
-          <strong>How to use:</strong> {getViewDescription()}
-          <br />
-          <strong>Current View:</strong> {getCurrentViewTitle()}
-          <br />
-          <strong>Coverage:</strong> 10+ major sorting algorithms including comparison-based, non-comparison, and specialized techniques.
-          <br />
-          <strong>Controls:</strong> Use toggle buttons to switch views. Zoom with mouse wheel, pan by dragging. Use export buttons to save as SVG or PNG.
-          <br />
-          <strong>Cross-references:</strong> Heap Sort (see <a href="/tree" className="text-blue-600 hover:underline">Binary Tree page</a>), Iterative implementations (see <a href="/stack" className="text-blue-600 hover:underline">Stack page</a>).
-        </div>
+
       </div>
               <div style={{ width: '100%', height: 'calc(100vh - 204px)' }}>
         <ReactFlow

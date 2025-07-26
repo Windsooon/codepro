@@ -2068,29 +2068,7 @@ function StackFlow() {
           </div>
         </div>
         
-        <div className="text-sm text-gray-500">
-          <strong>How to use:</strong> {
-            viewType === 'problem-type' 
-              ? 'Follow the decision path based on what type of stack operation you need to perform.' 
-              : viewType === 'algorithm-approach'
-              ? 'Follow the decision path based on algorithmic approach (monotonic stack, two-stack, etc.).'
-              : 'Follow the decision path based on data pattern (nested structures, sequential processing, etc.).'
-          } Each green node shows a stack algorithm with approach and complexity, while orange nodes contain related LeetCode problems.
-          <br />
-          <strong>Current View:</strong> {
-            viewType === 'problem-type' 
-              ? 'Categorization by Problem Type (expression processing, validation, optimization, etc.)' 
-              : viewType === 'algorithm-approach'
-              ? 'Categorization by Algorithm Approach (monotonic stack, two-stack techniques, etc.)'
-              : 'Categorization by Data Pattern (nested structures, sequential processing, optimization patterns)'
-          }
-          <br />
-          <strong>Coverage:</strong> 15+ major stack algorithms including parentheses matching, monotonic stack, expression evaluation, and advanced techniques.
-          <br />
-          <strong>Controls:</strong> Use toggle buttons to switch views. Zoom with mouse wheel, pan by dragging. Use export buttons to save as SVG or PNG.
-          <br />
-          <strong>Cross-references:</strong> Stack-based DFS (see <a href="/tree" className="text-blue-600 hover:underline">Binary Tree page</a>), Expression trees, and recursive patterns.
-        </div>
+
       </div>
       
               <div style={{ width: '100%', height: 'calc(100vh - 204px)' }}>
