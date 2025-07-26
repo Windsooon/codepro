@@ -274,12 +274,8 @@ const downloadPng = async (reactFlowInstance, viewType) => {
   }
 }
 
-// Main Flow Component
-function GraphProblemsFlow() {
-  const reactFlowInstance = useReactFlow()
-  const [viewType, setViewType] = useState('problem-type') // 'problem-type' or 'algorithm-approach'
-
-  const problemTypeData = {
+// Problem Type Data (moved outside component to prevent recreating)
+const problemTypeData = {
     nodes: [
       // Root
       {
@@ -847,7 +843,8 @@ function GraphProblemsFlow() {
          ]
    }
 
-   const algorithmApproachData = {
+// Algorithm Approach Data (moved outside component to prevent recreating)
+const algorithmApproachData = {
      nodes: [
        // Root
        {
@@ -1394,16 +1391,17 @@ function GraphProblemsFlow() {
      ]
    }
 
-   const currentData = viewType === 'problem-type' ? problemTypeData : algorithmApproachData
+// Main Flow Component
+function GraphProblemsFlow() {
+  const reactFlowInstance = useReactFlow()
+  const [viewType, setViewType] = useState('problem-type') // 'problem-type' or 'algorithm-approach'
 
-      const [nodes, setNodes, onNodesChange] = useNodesState(currentData.nodes)
+  const currentData = useMemo(() => {
+    return viewType === 'problem-type' ? problemTypeData : algorithmApproachData
+  }, [viewType])
+
+   const [nodes, setNodes, onNodesChange] = useNodesState(currentData.nodes)
    const [edges, setEdges, onEdgesChange] = useEdgesState(currentData.edges)
-
-   // Update nodes and edges when view type changes
-   React.useEffect(() => {
-     setNodes(currentData.nodes)
-     setEdges(currentData.edges)
-   }, [viewType, setNodes, setEdges, currentData])
 
   const onConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
@@ -1485,6 +1483,7 @@ function GraphProblemsFlow() {
       
       <div style={{ width: '100%', height: 'calc(100vh - 140px)' }}>
         <ReactFlow
+          key={viewType}
           nodes={nodes}
           edges={edges}
           onNodesChange={onNodesChange}
