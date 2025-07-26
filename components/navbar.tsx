@@ -109,6 +109,16 @@ export function Navbar({ activeSection, onSectionChange }: NavbarProps) {
                 </Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
+            
+            {/* Stack Decision Tree Link */}
+            <NavigationMenuItem>
+              <NavigationMenuLink asChild>
+                <Link href="/stack" className={navigationMenuTriggerStyle()}>
+                  <GitBranch className="h-4 w-4 mr-2" />
+                  Stack
+                </Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
       </div>
