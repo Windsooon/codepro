@@ -99,6 +99,16 @@ export function Navbar({ activeSection, onSectionChange }: NavbarProps) {
                 </Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
+            
+            {/* Binary Tree Decision Tree Link */}
+            <NavigationMenuItem>
+              <NavigationMenuLink asChild>
+                <Link href="/tree" className={navigationMenuTriggerStyle()}>
+                  <GitBranch className="h-4 w-4 mr-2" />
+                  Binary Tree
+                </Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
       </div>
