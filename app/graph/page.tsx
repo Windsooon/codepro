@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useCallback, useMemo, useRef } from 'react'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
 import {
   ReactFlow,
   useNodesState,
@@ -111,7 +111,7 @@ const nodeTypes = {
 }
 
 // Export function to download the flow as SVG
-const downloadSvg = (reactFlowInstance) => {
+const downloadSvg = (reactFlowInstance, viewType) => {
   if (reactFlowInstance) {
     reactFlowInstance.fitView({ padding: 50 })
     
@@ -154,7 +154,7 @@ const downloadSvg = (reactFlowInstance) => {
   <rect width="100%" height="100%" fill="#f9fafb"/>
   
   <text x="${width/2}" y="40" text-anchor="middle" class="node-title" font-size="20" fill="#1f2937">
-    Graph Problems Decision Tree
+    Graph Problems - ${viewType === 'problem-type' ? 'Problem Type View' : 'Algorithm Approach View'}
   </text>`
 
     edges.forEach(edge => {
@@ -217,7 +217,7 @@ const downloadSvg = (reactFlowInstance) => {
     const url = URL.createObjectURL(blob)
     const link = document.createElement('a')
     link.href = url
-    link.download = 'graph-problems-decision-tree.svg'
+    link.download = `graph-problems-${viewType}-view.svg`
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
@@ -226,7 +226,7 @@ const downloadSvg = (reactFlowInstance) => {
 }
 
 // Export function to download the flow as PNG
-const downloadPng = async (reactFlowInstance) => {
+const downloadPng = async (reactFlowInstance, viewType) => {
   if (reactFlowInstance) {
     try {
       const rfWrapper = document.querySelector('.react-flow')
@@ -263,13 +263,13 @@ const downloadPng = async (reactFlowInstance) => {
       
       const link = document.createElement('a')
       link.href = dataUrl
-      link.download = 'graph-problems-decision-tree.png'
+      link.download = `graph-problems-${viewType}-view.png`
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
     } catch (error) {
       console.error('Error exporting PNG:', error)
-      downloadSvg(reactFlowInstance)
+      downloadSvg(reactFlowInstance, viewType)
     }
   }
 }
@@ -277,8 +277,9 @@ const downloadPng = async (reactFlowInstance) => {
 // Main Flow Component
 function GraphProblemsFlow() {
   const reactFlowInstance = useReactFlow()
+  const [viewType, setViewType] = useState('problem-type') // 'problem-type' or 'algorithm-approach'
 
-  const graphData = {
+  const problemTypeData = {
     nodes: [
       // Root
       {
@@ -843,11 +844,566 @@ function GraphProblemsFlow() {
        { id: 'e38', source: 'leaf13', target: 'problems13', style: { stroke: '#f97316' } },
        { id: 'e39', source: 'leaf14', target: 'problems14', style: { stroke: '#f97316' } },
        { id: 'e40', source: 'leaf15', target: 'problems15', style: { stroke: '#f97316' } },
-    ]
-  }
+         ]
+   }
 
-  const [nodes, setNodes, onNodesChange] = useNodesState(graphData.nodes)
-  const [edges, setEdges, onEdgesChange] = useEdgesState(graphData.edges)
+   const algorithmApproachData = {
+     nodes: [
+       // Root
+       {
+         id: 'root',
+         type: 'root',
+         position: { x: 1000, y: 50 },
+         data: { label: 'Graph Algorithms by Approach' }
+       },
+       
+       // Level 1: Main algorithmic approaches
+       {
+         id: 'approach-type',
+         type: 'decision',
+         position: { x: 1000, y: 180 },
+         data: { 
+           label: 'What type of exploration do you need?',
+           tooltip: 'Different exploration strategies for graph problems'
+         }
+       },
+
+       // Level 2A: Search-based approaches
+       {
+         id: 'search-type',
+         type: 'decision',
+         position: { x: 400, y: 320 },
+         data: { 
+           label: 'Do you need level-by-level exploration?',
+           tooltip: 'BFS vs DFS exploration strategies'
+         }
+       },
+
+       // Level 2B: Union-Find approaches
+       {
+         id: 'union-find-type',
+         type: 'decision',
+         position: { x: 800, y: 320 },
+         data: { 
+           label: 'Do you need dynamic connectivity?',
+           tooltip: 'Union-Find for disjoint set operations'
+         }
+       },
+
+       // Level 2C: Specialized algorithms
+       {
+         id: 'specialized-type',
+         type: 'decision',
+         position: { x: 1200, y: 320 },
+         data: { 
+           label: 'Do you need shortest paths with weights?',
+           tooltip: 'Dijkstra, Bellman-Ford, Floyd-Warshall'
+         }
+       },
+
+       // Level 2D: Advanced techniques
+       {
+         id: 'advanced-type',
+         type: 'decision',
+         position: { x: 1600, y: 320 },
+         data: { 
+           label: 'Do you need ordering or flow?',
+           tooltip: 'Topological sort, maximum flow, or advanced techniques'
+         }
+       },
+
+       // Level 3: Further refinement
+       {
+         id: 'bfs-applications',
+         type: 'decision',
+         position: { x: 200, y: 460 },
+         data: { 
+           label: 'Is it unweighted shortest path?',
+           tooltip: 'BFS for shortest paths vs other applications'
+         }
+       },
+
+       {
+         id: 'dfs-applications',
+         type: 'decision',
+         position: { x: 600, y: 460 },
+         data: { 
+           label: 'Do you need to detect cycles or components?',
+           tooltip: 'DFS for structural analysis vs path finding'
+         }
+       },
+
+       {
+         id: 'shortest-path-type',
+         type: 'decision',
+         position: { x: 1200, y: 460 },
+         data: { 
+           label: 'Are there negative weights?',
+           tooltip: 'Determines which shortest path algorithm to use'
+         }
+       },
+
+       {
+         id: 'ordering-flow-type',
+         type: 'decision',
+         position: { x: 1600, y: 460 },
+         data: { 
+           label: 'Do you need dependency ordering?',
+           tooltip: 'Topological sort vs maximum flow'
+         }
+       },
+
+       // Algorithm Leaf Nodes (organized by approach)
+       {
+         id: 'alg-leaf1',
+         type: 'leaf',
+         position: { x: 100, y: 600 },
+         data: {
+           technique: 'BFS Shortest Path',
+           approach: 'Level-by-level exploration for unweighted graphs',
+           complexity: 'O(V+E) time, O(V) space',
+           useCases: 'Unweighted shortest path, level-order traversal'
+         }
+       },
+
+       {
+         id: 'alg-leaf2',
+         type: 'leaf',
+         position: { x: 300, y: 740 },
+         data: {
+           technique: 'BFS Applications',
+           approach: 'Breadth-first search for various problems',
+           complexity: 'O(V+E) time, O(V) space',
+           useCases: 'Connected components, bipartite detection, grid problems'
+         }
+       },
+
+       {
+         id: 'alg-leaf3',
+         type: 'leaf',
+         position: { x: 500, y: 600 },
+         data: {
+           technique: 'DFS Cycle Detection',
+           approach: 'Depth-first search to find cycles',
+           complexity: 'O(V+E) time, O(V) space',
+           useCases: 'Cycle detection, strongly connected components'
+         }
+       },
+
+       {
+         id: 'alg-leaf4',
+         type: 'leaf',
+         position: { x: 700, y: 740 },
+         data: {
+           technique: 'DFS Backtracking',
+           approach: 'Exhaustive search with backtracking',
+           complexity: 'O(V!) worst case, O(V) space',
+           useCases: 'All paths, Hamiltonian paths, graph coloring'
+         }
+       },
+
+       {
+         id: 'alg-leaf5',
+         type: 'leaf',
+         position: { x: 800, y: 460 },
+         data: {
+           technique: 'Union-Find (Disjoint Set)',
+           approach: 'Dynamic connectivity with path compression',
+           complexity: 'O(α(n)) time, O(V) space',
+           useCases: 'Dynamic connectivity, MST, percolation'
+         }
+       },
+
+       {
+         id: 'alg-leaf6',
+         type: 'leaf',
+         position: { x: 1000, y: 600 },
+         data: {
+           technique: 'Dijkstra\'s Algorithm',
+           approach: 'Priority queue-based shortest path',
+           complexity: 'O((V+E)log V) time, O(V) space',
+           useCases: 'Single source shortest path (non-negative weights)'
+         }
+       },
+
+       {
+         id: 'alg-leaf7',
+         type: 'leaf',
+         position: { x: 1200, y: 740 },
+         data: {
+           technique: 'Bellman-Ford Algorithm',
+           approach: 'Dynamic programming for shortest paths',
+           complexity: 'O(VE) time, O(V) space',
+           useCases: 'Single source shortest path with negative weights'
+         }
+       },
+
+       {
+         id: 'alg-leaf8',
+         type: 'leaf',
+         position: { x: 1400, y: 600 },
+         data: {
+           technique: 'Floyd-Warshall Algorithm',
+           approach: 'Dynamic programming for all pairs',
+           complexity: 'O(V³) time, O(V²) space',
+           useCases: 'All pairs shortest paths, transitive closure'
+         }
+       },
+
+       {
+         id: 'alg-leaf9',
+         type: 'leaf',
+         position: { x: 1500, y: 600 },
+         data: {
+           technique: 'Topological Sort',
+           approach: 'Linear ordering using DFS or BFS',
+           complexity: 'O(V+E) time, O(V) space',
+           useCases: 'Dependency resolution, task scheduling'
+         }
+       },
+
+       {
+         id: 'alg-leaf10',
+         type: 'leaf',
+         position: { x: 1700, y: 740 },
+         data: {
+           technique: 'Maximum Flow',
+           approach: 'Augmenting path algorithms',
+           complexity: 'O(Ef) time, O(V+E) space',
+           useCases: 'Network flow, bipartite matching'
+         }
+       },
+
+       {
+         id: 'alg-leaf11',
+         type: 'leaf',
+         position: { x: 900, y: 600 },
+         data: {
+           technique: 'Minimum Spanning Tree',
+           approach: 'Greedy algorithms (Kruskal/Prim)',
+           complexity: 'O(E log V) time, O(V) space',
+           useCases: 'Network design, clustering'
+         }
+       },
+
+       {
+         id: 'alg-leaf12',
+         type: 'leaf',
+         position: { x: 1100, y: 880 },
+         data: {
+           technique: 'Tarjan\'s Algorithm',
+           approach: 'DFS-based strongly connected components',
+           complexity: 'O(V+E) time, O(V) space',
+           useCases: 'SCC, bridges, articulation points'
+         }
+       },
+
+       {
+         id: 'alg-leaf13',
+         type: 'leaf',
+         position: { x: 1800, y: 600 },
+         data: {
+           technique: 'A* Search',
+           approach: 'Heuristic-guided search',
+           complexity: 'O(b^d) time, O(b^d) space',
+           useCases: 'Pathfinding with heuristics, games'
+         }
+       },
+
+       {
+         id: 'alg-leaf14',
+         type: 'leaf',
+         position: { x: 600, y: 880 },
+         data: {
+           technique: 'Graph DP',
+           approach: 'Dynamic programming on graphs',
+           complexity: 'O(V+E) to O(V*2^V) depending on problem',
+           useCases: 'Longest path in DAG, TSP variants'
+         }
+       },
+
+       {
+         id: 'alg-leaf15',
+         type: 'leaf',
+         position: { x: 200, y: 880 },
+         data: {
+           technique: 'Two-Coloring (Bipartite)',
+           approach: 'BFS/DFS-based graph coloring',
+           complexity: 'O(V+E) time, O(V) space',
+           useCases: 'Bipartite detection, conflict graphs'
+         }
+       },
+
+       // Problem nodes for algorithm approach view
+       {
+         id: 'alg-problems1',
+         type: 'problem',
+         position: { x: 100, y: 740 },
+         data: {
+           problems: [
+             { number: 1091, title: 'Shortest Path in Binary Matrix', url: 'https://leetcode.com/problems/shortest-path-in-binary-matrix/', difficulty: 'Medium' },
+             { number: 542, title: '01 Matrix', url: 'https://leetcode.com/problems/01-matrix/', difficulty: 'Medium' },
+             { number: 127, title: 'Word Ladder', url: 'https://leetcode.com/problems/word-ladder/', difficulty: 'Hard' },
+             { number: 994, title: 'Rotting Oranges', url: 'https://leetcode.com/problems/rotting-oranges/', difficulty: 'Medium' },
+           ]
+         }
+       },
+
+       {
+         id: 'alg-problems2',
+         type: 'problem',
+         position: { x: 300, y: 880 },
+         data: {
+           problems: [
+             { number: 200, title: 'Number of Islands', url: 'https://leetcode.com/problems/number-of-islands/', difficulty: 'Medium' },
+             { number: 785, title: 'Is Graph Bipartite?', url: 'https://leetcode.com/problems/is-graph-bipartite/', difficulty: 'Medium' },
+             { number: 133, title: 'Clone Graph', url: 'https://leetcode.com/problems/clone-graph/', difficulty: 'Medium' },
+             { number: 695, title: 'Max Area of Island', url: 'https://leetcode.com/problems/max-area-of-island/', difficulty: 'Medium' },
+           ]
+         }
+       },
+
+       {
+         id: 'alg-problems3',
+         type: 'problem',
+         position: { x: 500, y: 740 },
+         data: {
+           problems: [
+             { number: 207, title: 'Course Schedule', url: 'https://leetcode.com/problems/course-schedule/', difficulty: 'Medium' },
+             { number: 802, title: 'Find Eventual Safe States', url: 'https://leetcode.com/problems/find-eventual-safe-states/', difficulty: 'Medium' },
+             { number: 684, title: 'Redundant Connection', url: 'https://leetcode.com/problems/redundant-connection/', difficulty: 'Medium' },
+             { number: 1192, title: 'Critical Connections in a Network', url: 'https://leetcode.com/problems/critical-connections-in-a-network/', difficulty: 'Hard' },
+           ]
+         }
+       },
+
+       {
+         id: 'alg-problems4',
+         type: 'problem',
+         position: { x: 700, y: 880 },
+         data: {
+           problems: [
+             { number: 79, title: 'Word Search', url: 'https://leetcode.com/problems/word-search/', difficulty: 'Medium' },
+             { number: 212, title: 'Word Search II', url: 'https://leetcode.com/problems/word-search-ii/', difficulty: 'Hard' },
+             { number: 131, title: 'Palindrome Partitioning', url: 'https://leetcode.com/problems/palindrome-partitioning/', difficulty: 'Medium' },
+             { number: 77, title: 'Combinations', url: 'https://leetcode.com/problems/combinations/', difficulty: 'Medium' },
+           ]
+         }
+       },
+
+       {
+         id: 'alg-problems5',
+         type: 'problem',
+         position: { x: 800, y: 600 },
+         data: {
+           problems: [
+             { number: 547, title: 'Number of Provinces', url: 'https://leetcode.com/problems/number-of-provinces/', difficulty: 'Medium' },
+             { number: 721, title: 'Accounts Merge', url: 'https://leetcode.com/problems/accounts-merge/', difficulty: 'Medium' },
+             { number: 1584, title: 'Min Cost to Connect All Points', url: 'https://leetcode.com/problems/min-cost-to-connect-all-points/', difficulty: 'Medium' },
+             { number: 827, title: 'Making A Large Island', url: 'https://leetcode.com/problems/making-a-large-island/', difficulty: 'Hard' },
+           ]
+         }
+       },
+
+       {
+         id: 'alg-problems6',
+         type: 'problem',
+         position: { x: 1000, y: 740 },
+         data: {
+           problems: [
+             { number: 743, title: 'Network Delay Time', url: 'https://leetcode.com/problems/network-delay-time/', difficulty: 'Medium' },
+             { number: 1631, title: 'Path With Minimum Effort', url: 'https://leetcode.com/problems/path-with-minimum-effort/', difficulty: 'Medium' },
+             { number: 778, title: 'Swim in Rising Water', url: 'https://leetcode.com/problems/swim-in-rising-water/', difficulty: 'Hard' },
+             { number: 1368, title: 'Minimum Cost to Make at Least One Valid Path in a Grid', url: 'https://leetcode.com/problems/minimum-cost-to-make-at-least-one-valid-path-in-a-grid/', difficulty: 'Hard' },
+           ]
+         }
+       },
+
+       {
+         id: 'alg-problems7',
+         type: 'problem',
+         position: { x: 1200, y: 880 },
+         data: {
+           problems: [
+             { number: 787, title: 'Cheapest Flights Within K Stops', url: 'https://leetcode.com/problems/cheapest-flights-within-k-stops/', difficulty: 'Medium' },
+             { number: 1514, title: 'Path with Maximum Probability', url: 'https://leetcode.com/problems/path-with-maximum-probability/', difficulty: 'Medium' },
+             { number: 1928, title: 'Minimum Cost to Reach Destination in Time', url: 'https://leetcode.com/problems/minimum-cost-to-reach-destination-in-time/', difficulty: 'Hard' },
+           ]
+         }
+       },
+
+       {
+         id: 'alg-problems8',
+         type: 'problem',
+         position: { x: 1400, y: 740 },
+         data: {
+           problems: [
+             { number: 1334, title: 'Find the City With the Smallest Number of Neighbors at a Threshold Distance', url: 'https://leetcode.com/problems/find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance/', difficulty: 'Medium' },
+             { number: 1462, title: 'Course Schedule IV', url: 'https://leetcode.com/problems/course-schedule-iv/', difficulty: 'Medium' },
+             { number: 1617, title: 'Count Subtrees With Max Distance Between Cities', url: 'https://leetcode.com/problems/count-subtrees-with-max-distance-between-cities/', difficulty: 'Hard' },
+           ]
+         }
+       },
+
+       {
+         id: 'alg-problems9',
+         type: 'problem',
+         position: { x: 1500, y: 740 },
+         data: {
+           problems: [
+             { number: 210, title: 'Course Schedule II', url: 'https://leetcode.com/problems/course-schedule-ii/', difficulty: 'Medium' },
+             { number: 269, title: 'Alien Dictionary', url: 'https://leetcode.com/problems/alien-dictionary/', difficulty: 'Hard' },
+             { number: 310, title: 'Minimum Height Trees', url: 'https://leetcode.com/problems/minimum-height-trees/', difficulty: 'Medium' },
+             { number: 1857, title: 'Largest Color Value in a Directed Graph', url: 'https://leetcode.com/problems/largest-color-value-in-a-directed-graph/', difficulty: 'Hard' },
+           ]
+         }
+       },
+
+       {
+         id: 'alg-problems10',
+         type: 'problem',
+         position: { x: 1700, y: 880 },
+         data: {
+           problems: [
+             { number: 1579, title: 'Remove Max Number of Edges to Keep Graph Fully Traversable', url: 'https://leetcode.com/problems/remove-max-number-of-edges-to-keep-graph-fully-traversable/', difficulty: 'Hard' },
+             { number: 1061, title: 'Lexicographically Smallest Equivalent String', url: 'https://leetcode.com/problems/lexicographically-smallest-equivalent-string/', difficulty: 'Medium' },
+             { number: 1905, title: 'Count Sub Islands', url: 'https://leetcode.com/problems/count-sub-islands/', difficulty: 'Medium' },
+           ]
+         }
+       },
+
+       {
+         id: 'alg-problems11',
+         type: 'problem',
+         position: { x: 900, y: 740 },
+         data: {
+           problems: [
+             { number: 1135, title: 'Connecting Cities With Minimum Cost', url: 'https://leetcode.com/problems/connecting-cities-with-minimum-cost/', difficulty: 'Medium' },
+             { number: 1489, title: 'Find Critical and Pseudo-Critical Edges in MST', url: 'https://leetcode.com/problems/find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree/', difficulty: 'Hard' },
+             { number: 1168, title: 'Optimize Water Distribution in a Village', url: 'https://leetcode.com/problems/optimize-water-distribution-in-a-village/', difficulty: 'Hard' },
+           ]
+         }
+       },
+
+       {
+         id: 'alg-problems12',
+         type: 'problem',
+         position: { x: 1100, y: 1020 },
+         data: {
+           problems: [
+             { number: 1568, title: 'Minimum Number of Days to Disconnect Island', url: 'https://leetcode.com/problems/minimum-number-of-days-to-disconnect-island/', difficulty: 'Hard' },
+             { number: 323, title: 'Number of Connected Components in an Undirected Graph', url: 'https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/', difficulty: 'Medium' },
+             { number: 928, title: 'Minimize Malware Spread II', url: 'https://leetcode.com/problems/minimize-malware-spread-ii/', difficulty: 'Hard' },
+           ]
+         }
+       },
+
+       {
+         id: 'alg-problems13',
+         type: 'problem',
+         position: { x: 1800, y: 740 },
+         data: {
+           problems: [
+             { number: 1293, title: 'Shortest Path in a Grid with Obstacles Elimination', url: 'https://leetcode.com/problems/shortest-path-in-a-grid-with-obstacles-elimination/', difficulty: 'Hard' },
+             { number: 864, title: 'Shortest Path to Get All Keys', url: 'https://leetcode.com/problems/shortest-path-to-get-all-keys/', difficulty: 'Hard' },
+             { number: 126, title: 'Word Ladder II', url: 'https://leetcode.com/problems/word-ladder-ii/', difficulty: 'Hard' },
+           ]
+         }
+       },
+
+       {
+         id: 'alg-problems14',
+         type: 'problem',
+         position: { x: 600, y: 1020 },
+         data: {
+           problems: [
+             { number: 1483, title: 'Kth Ancestor of a Tree Node', url: 'https://leetcode.com/problems/kth-ancestor-of-a-tree-node/', difficulty: 'Hard' },
+             { number: 1143, title: 'Longest Common Subsequence', url: 'https://leetcode.com/problems/longest-common-subsequence/', difficulty: 'Medium' },
+             { number: 368, title: 'Largest Divisible Subset', url: 'https://leetcode.com/problems/largest-divisible-subset/', difficulty: 'Medium' },
+           ]
+         }
+       },
+
+       {
+         id: 'alg-problems15',
+         type: 'problem',
+         position: { x: 200, y: 1020 },
+         data: {
+           problems: [
+             { number: 886, title: 'Possible Bipartition', url: 'https://leetcode.com/problems/possible-bipartition/', difficulty: 'Medium' },
+             { number: 1042, title: 'Flower Planting With No Adjacent', url: 'https://leetcode.com/problems/flower-planting-with-no-adjacent/', difficulty: 'Medium' },
+             { number: 1079, title: 'Letter Tile Possibilities', url: 'https://leetcode.com/problems/letter-tile-possibilities/', difficulty: 'Medium' },
+           ]
+         }
+       },
+     ],
+     
+     edges: [
+       // Root to Level 1
+       { id: 'alg-e1', source: 'root', target: 'approach-type', animated: true },
+       
+       // Level 1 to Level 2
+       { id: 'alg-e2', source: 'approach-type', sourceHandle: 'yes', target: 'search-type', label: 'Search', style: { stroke: '#10b981' } },
+       { id: 'alg-e3', source: 'approach-type', sourceHandle: 'no', target: 'union-find-type', label: 'Union-Find', style: { stroke: '#ef4444' } },
+       
+       // Additional branches from approach-type
+       { id: 'alg-e3b', source: 'union-find-type', sourceHandle: 'no', target: 'specialized-type', label: 'No', style: { stroke: '#ef4444' } },
+       { id: 'alg-e3c', source: 'specialized-type', sourceHandle: 'no', target: 'advanced-type', label: 'No', style: { stroke: '#ef4444' } },
+       
+       // Level 2 to Level 3
+       { id: 'alg-e4', source: 'search-type', sourceHandle: 'yes', target: 'bfs-applications', label: 'Yes (BFS)', style: { stroke: '#10b981' } },
+       { id: 'alg-e5', source: 'search-type', sourceHandle: 'no', target: 'dfs-applications', label: 'No (DFS)', style: { stroke: '#ef4444' } },
+       { id: 'alg-e6', source: 'union-find-type', sourceHandle: 'yes', target: 'alg-leaf5', label: 'Yes', style: { stroke: '#10b981' } },
+       { id: 'alg-e7', source: 'specialized-type', sourceHandle: 'yes', target: 'shortest-path-type', label: 'Yes', style: { stroke: '#10b981' } },
+       { id: 'alg-e8', source: 'advanced-type', sourceHandle: 'yes', target: 'ordering-flow-type', label: 'Yes', style: { stroke: '#10b981' } },
+       
+       // Level 3 to Leaves
+       { id: 'alg-e9', source: 'bfs-applications', sourceHandle: 'yes', target: 'alg-leaf1', label: 'Yes', style: { stroke: '#10b981' } },
+       { id: 'alg-e10', source: 'bfs-applications', sourceHandle: 'no', target: 'alg-leaf2', label: 'No', style: { stroke: '#ef4444' } },
+       { id: 'alg-e11', source: 'dfs-applications', sourceHandle: 'yes', target: 'alg-leaf3', label: 'Yes', style: { stroke: '#10b981' } },
+       { id: 'alg-e12', source: 'dfs-applications', sourceHandle: 'no', target: 'alg-leaf4', label: 'No', style: { stroke: '#ef4444' } },
+       { id: 'alg-e13', source: 'shortest-path-type', sourceHandle: 'yes', target: 'alg-leaf7', label: 'Yes', style: { stroke: '#10b981' } },
+       { id: 'alg-e14', source: 'shortest-path-type', sourceHandle: 'no', target: 'alg-leaf6', label: 'No', style: { stroke: '#ef4444' } },
+       { id: 'alg-e15', source: 'ordering-flow-type', sourceHandle: 'yes', target: 'alg-leaf9', label: 'Yes', style: { stroke: '#10b981' } },
+       { id: 'alg-e16', source: 'ordering-flow-type', sourceHandle: 'no', target: 'alg-leaf10', label: 'No', style: { stroke: '#ef4444' } },
+       
+       // Additional algorithm connections
+       { id: 'alg-e17', source: 'specialized-type', target: 'alg-leaf8', label: 'All Pairs', style: { stroke: '#8b5cf6' } },
+       { id: 'alg-e18', source: 'union-find-type', target: 'alg-leaf11', label: 'MST', style: { stroke: '#8b5cf6' } },
+       { id: 'alg-e19', source: 'dfs-applications', target: 'alg-leaf12', label: 'SCC', style: { stroke: '#8b5cf6' } },
+       { id: 'alg-e20', source: 'specialized-type', target: 'alg-leaf13', label: 'Heuristic', style: { stroke: '#8b5cf6' } },
+       { id: 'alg-e21', source: 'advanced-type', target: 'alg-leaf14', label: 'DP', style: { stroke: '#8b5cf6' } },
+       { id: 'alg-e22', source: 'bfs-applications', target: 'alg-leaf15', label: 'Bipartite', style: { stroke: '#8b5cf6' } },
+       
+       // Leaf nodes to Problem nodes
+       { id: 'alg-e23', source: 'alg-leaf1', target: 'alg-problems1', style: { stroke: '#f97316' } },
+       { id: 'alg-e24', source: 'alg-leaf2', target: 'alg-problems2', style: { stroke: '#f97316' } },
+       { id: 'alg-e25', source: 'alg-leaf3', target: 'alg-problems3', style: { stroke: '#f97316' } },
+       { id: 'alg-e26', source: 'alg-leaf4', target: 'alg-problems4', style: { stroke: '#f97316' } },
+       { id: 'alg-e27', source: 'alg-leaf5', target: 'alg-problems5', style: { stroke: '#f97316' } },
+       { id: 'alg-e28', source: 'alg-leaf6', target: 'alg-problems6', style: { stroke: '#f97316' } },
+       { id: 'alg-e29', source: 'alg-leaf7', target: 'alg-problems7', style: { stroke: '#f97316' } },
+       { id: 'alg-e30', source: 'alg-leaf8', target: 'alg-problems8', style: { stroke: '#f97316' } },
+       { id: 'alg-e31', source: 'alg-leaf9', target: 'alg-problems9', style: { stroke: '#f97316' } },
+       { id: 'alg-e32', source: 'alg-leaf10', target: 'alg-problems10', style: { stroke: '#f97316' } },
+       { id: 'alg-e33', source: 'alg-leaf11', target: 'alg-problems11', style: { stroke: '#f97316' } },
+       { id: 'alg-e34', source: 'alg-leaf12', target: 'alg-problems12', style: { stroke: '#f97316' } },
+       { id: 'alg-e35', source: 'alg-leaf13', target: 'alg-problems13', style: { stroke: '#f97316' } },
+       { id: 'alg-e36', source: 'alg-leaf14', target: 'alg-problems14', style: { stroke: '#f97316' } },
+       { id: 'alg-e37', source: 'alg-leaf15', target: 'alg-problems15', style: { stroke: '#f97316' } },
+     ]
+   }
+
+   const currentData = viewType === 'problem-type' ? problemTypeData : algorithmApproachData
+
+      const [nodes, setNodes, onNodesChange] = useNodesState(currentData.nodes)
+   const [edges, setEdges, onEdgesChange] = useEdgesState(currentData.edges)
+
+   // Update nodes and edges when view type changes
+   React.useEffect(() => {
+     setNodes(currentData.nodes)
+     setEdges(currentData.edges)
+   }, [viewType, setNodes, setEdges, currentData])
 
   const onConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
@@ -858,10 +1414,34 @@ function GraphProblemsFlow() {
     <div style={{ width: '100vw', height: '100vh' }}>
       <div className="p-4 bg-gray-100 border-b">
         <div className="flex justify-between items-center mb-2">
-          <h1 className="text-2xl font-bold text-gray-800">Graph Problems Decision Tree</h1>
+          <div className="flex items-center gap-4">
+            <h1 className="text-2xl font-bold text-gray-800">Graph Problems Decision Tree</h1>
+            <div className="flex items-center gap-2 bg-white rounded-lg p-1 shadow-sm">
+              <button
+                onClick={() => setViewType('problem-type')}
+                className={`px-3 py-1 rounded-md text-sm font-medium transition-colors duration-200 ${
+                  viewType === 'problem-type' 
+                    ? 'bg-blue-500 text-white shadow-sm' 
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                Problem Type
+              </button>
+              <button
+                onClick={() => setViewType('algorithm-approach')}
+                className={`px-3 py-1 rounded-md text-sm font-medium transition-colors duration-200 ${
+                  viewType === 'algorithm-approach' 
+                    ? 'bg-blue-500 text-white shadow-sm' 
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                Algorithm Approach
+              </button>
+            </div>
+          </div>
           <div className="flex gap-2">
             <button
-              onClick={() => downloadSvg(reactFlowInstance)}
+              onClick={() => downloadSvg(reactFlowInstance, viewType)}
               className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg shadow-md transition-colors duration-200 flex items-center gap-2"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -872,7 +1452,7 @@ function GraphProblemsFlow() {
               Export SVG
             </button>
             <button
-              onClick={() => downloadPng(reactFlowInstance)}
+              onClick={() => downloadPng(reactFlowInstance, viewType)}
               className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg shadow-md transition-colors duration-200 flex items-center gap-2"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -886,12 +1466,20 @@ function GraphProblemsFlow() {
         </div>
         
         <div className="text-sm text-gray-500">
-          <strong>How to use:</strong> Follow the decision path based on your graph characteristics. 
+          <strong>How to use:</strong> {viewType === 'problem-type' 
+            ? 'Follow the decision path based on your graph characteristics (weighted, directed, etc.)' 
+            : 'Follow the decision path based on algorithmic approach (BFS, DFS, Union-Find, etc.)'
+          }. 
           Each green node shows a graph algorithm with approach and complexity, while orange nodes contain related LeetCode problems.
           <br />
-          <strong>Coverage:</strong> 15 major graph algorithms including BFS/DFS, Shortest Path, MST, Topological Sort, Union-Find, SCC, and advanced techniques.
+          <strong>Current View:</strong> {viewType === 'problem-type' 
+            ? 'Categorization by Problem Type (shortest path, connectivity, traversal, etc.)' 
+            : 'Categorization by Algorithm Approach (BFS-based, DFS-based, Union-Find, etc.)'
+          }
           <br />
-          <strong>Controls:</strong> Zoom with mouse wheel, pan by dragging. Use export buttons to save as SVG or PNG.
+          <strong>Coverage:</strong> 15+ major graph algorithms including BFS/DFS, Shortest Path, MST, Topological Sort, Union-Find, SCC, and advanced techniques.
+          <br />
+          <strong>Controls:</strong> Use toggle buttons to switch views. Zoom with mouse wheel, pan by dragging. Use export buttons to save as SVG or PNG.
         </div>
       </div>
       
@@ -911,7 +1499,7 @@ function GraphProblemsFlow() {
           <Panel position="top-right">
             <div className="flex gap-1">
               <button
-                onClick={() => downloadSvg(reactFlowInstance)}
+                onClick={() => downloadSvg(reactFlowInstance, viewType)}
                 className="px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md shadow-md transition-colors duration-200 flex items-center gap-1 text-sm"
                 title="Export decision tree as SVG"
               >
@@ -923,7 +1511,7 @@ function GraphProblemsFlow() {
                 SVG
               </button>
               <button
-                onClick={() => downloadPng(reactFlowInstance)}
+                onClick={() => downloadPng(reactFlowInstance, viewType)}
                 className="px-3 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md shadow-md transition-colors duration-200 flex items-center gap-1 text-sm"
                 title="Export decision tree as PNG"
               >
