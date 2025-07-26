@@ -2,12 +2,17 @@
 
 import * as React from "react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { 
   BarChart3, 
-  Code,
   Trophy,
   GitBranch,
-  ArrowUpDown
+  ArrowUpDown,
+  Brain,
+  Binary,
+  Layers,
+  Home,
+  ChevronDown
 } from "lucide-react"
 
 import {
@@ -15,30 +20,30 @@ import {
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
+  NavigationMenuTrigger,
+  NavigationMenuContent,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
 
-interface NavbarProps {
-  activeSection: string
-  onSectionChange: (section: string) => void
-}
-
-const sections = [
-  {
-    id: "overview",
-    title: "Overview",
-    icon: BarChart3,
-    description: "Dashboard overview with statistics and recent activity"
-  },
-  {
-    id: "practice",
-    title: "Practice",
-    icon: Code,
-    description: "Problem solving practice and progress tracking"
-  }
+// Data structure definitions
+const algorithmPages = [
+  { href: "/dynamic-programming", title: "Dynamic Programming", icon: Brain },
+  { href: "/graph", title: "Graph Problems", icon: GitBranch },
+  { href: "/sorting", title: "Sorting", icon: ArrowUpDown },
 ]
 
-export function Navbar({ activeSection, onSectionChange }: NavbarProps) {
+const dataStructurePages = [
+  { href: "/tree", title: "Binary Tree", icon: Binary },
+  { href: "/stack", title: "Stack", icon: Layers },
+]
+
+interface NavbarProps {
+  activeSection?: string
+  onSectionChange?: (section: string) => void
+}
+
+export function Navbar({ activeSection, onSectionChange }: NavbarProps = {}) {
+  const pathname = usePathname()
   return (
     <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center gap-8">
@@ -48,89 +53,90 @@ export function Navbar({ activeSection, onSectionChange }: NavbarProps) {
           <span className="font-bold text-lg">LeetCode Dashboard</span>
         </div>
 
-        {/* Navigation Menu - Left aligned */}
+        {/* Navigation Menu */}
         <NavigationMenu>
           <NavigationMenuList>
-            {/* Direct navigation links */}
-            {sections.map((section) => {
-              const Icon = section.icon
-              return (
-                <NavigationMenuItem key={section.id}>
-                  <NavigationMenuLink asChild>
-                    <button 
-                      className={`${navigationMenuTriggerStyle()} ${
-                        activeSection === section.id ? "bg-accent text-accent-foreground" : ""
-                      }`}
-                      onClick={() => onSectionChange(section.id)}
-                    >
-                      <Icon className="h-4 w-4 mr-2" />
-                      {section.title}
-                    </button>
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-              )
-            })}
-            
-            {/* Two-Pointer Decision Tree Link */}
+            {/* Overview Link */}
             <NavigationMenuItem>
               <NavigationMenuLink asChild>
-                <Link href="/two-pointer-tree" className={navigationMenuTriggerStyle()}>
-                  <GitBranch className="h-4 w-4 mr-2" />
-                  Two-Pointer Tree
+                <Link 
+                  href="/" 
+                  className={`${navigationMenuTriggerStyle()} ${
+                    pathname === "/" ? "bg-accent text-accent-foreground" : ""
+                  }`}
+                >
+                  <Home className="h-4 w-4 mr-2" />
+                  Overview
                 </Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
-            
-            {/* Dynamic Programming Decision Tree Link */}
+
+            {/* Data Structures Dropdown */}
             <NavigationMenuItem>
-              <NavigationMenuLink asChild>
-                <Link href="/dynamic-programming" className={navigationMenuTriggerStyle()}>
-                  <GitBranch className="h-4 w-4 mr-2" />
-                  Dynamic Programming
-                </Link>
-              </NavigationMenuLink>
+              <NavigationMenuTrigger className="flex items-center gap-1">
+                <Binary className="h-4 w-4" />
+                Data Structures
+                <ChevronDown className="h-3 w-3" />
+              </NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <div className="flex flex-col gap-1 p-4 w-64">
+                  <div className="text-sm font-medium text-muted-foreground mb-2">
+                    Data Structure Problems
+                  </div>
+                  {dataStructurePages.map((page) => {
+                    const Icon = page.icon
+                    const isActive = pathname === page.href
+                    return (
+                      <NavigationMenuLink key={page.href} asChild>
+                        <Link
+                          href={page.href}
+                          className={`flex items-center gap-3 px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors ${
+                            isActive ? "bg-accent text-accent-foreground font-medium" : ""
+                          }`}
+                        >
+                          <Icon className="h-4 w-4" />
+                          {page.title}
+                        </Link>
+                      </NavigationMenuLink>
+                    )
+                  })}
+                </div>
+              </NavigationMenuContent>
             </NavigationMenuItem>
-            
-            {/* Graph Problems Decision Tree Link */}
+
+            {/* Algorithms Dropdown */}
             <NavigationMenuItem>
-              <NavigationMenuLink asChild>
-                <Link href="/graph" className={navigationMenuTriggerStyle()}>
-                  <GitBranch className="h-4 w-4 mr-2" />
-                  Graph Problems
-                </Link>
-              </NavigationMenuLink>
+              <NavigationMenuTrigger className="flex items-center gap-1">
+                <Brain className="h-4 w-4" />
+                Algorithms
+                <ChevronDown className="h-3 w-3" />
+              </NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <div className="flex flex-col gap-1 p-4 w-64">
+                  <div className="text-sm font-medium text-muted-foreground mb-2">
+                    Algorithm Problems
+                  </div>
+                  {algorithmPages.map((page) => {
+                    const Icon = page.icon
+                    const isActive = pathname === page.href
+                    return (
+                      <NavigationMenuLink key={page.href} asChild>
+                        <Link
+                          href={page.href}
+                          className={`flex items-center gap-3 px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors ${
+                            isActive ? "bg-accent text-accent-foreground font-medium" : ""
+                          }`}
+                        >
+                          <Icon className="h-4 w-4" />
+                          {page.title}
+                        </Link>
+                      </NavigationMenuLink>
+                    )
+                  })}
+                </div>
+              </NavigationMenuContent>
             </NavigationMenuItem>
-            
-            {/* Binary Tree Decision Tree Link */}
-            <NavigationMenuItem>
-              <NavigationMenuLink asChild>
-                <Link href="/tree" className={navigationMenuTriggerStyle()}>
-                  <GitBranch className="h-4 w-4 mr-2" />
-                  Binary Tree
-                </Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            
-                          {/* Stack Decision Tree Link */}
-              <NavigationMenuItem>
-                <NavigationMenuLink asChild>
-                  <Link href="/stack" className={navigationMenuTriggerStyle()}>
-                    <GitBranch className="h-4 w-4 mr-2" />
-                    Stack
-                  </Link>
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-              
-              {/* Sorting Decision Tree Link */}
-              <NavigationMenuItem>
-                <NavigationMenuLink asChild>
-                  <Link href="/sorting" className={navigationMenuTriggerStyle()}>
-                    <ArrowUpDown className="h-4 w-4 mr-2" />
-                    Sorting
-                  </Link>
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-            </NavigationMenuList>
+          </NavigationMenuList>
         </NavigationMenu>
       </div>
     </div>

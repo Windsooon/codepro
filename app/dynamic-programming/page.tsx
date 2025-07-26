@@ -18,6 +18,7 @@ import {
   getViewportForBounds,
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
+import { Navbar } from '@/components/navbar'
 
 // Custom Decision Node Component
 const DecisionNode = ({ data }) => {
@@ -724,7 +725,7 @@ function DynamicProgrammingFlow() {
   )
 
   return (
-    <div style={{ width: '100vw', height: '100vh' }}>
+    <div style={{ width: '100vw', height: 'calc(100vh - 64px)' }}>
       <div className="p-4 bg-gray-100 border-b">
         <div className="flex justify-between items-center mb-2">
           <h1 className="text-2xl font-bold text-gray-800">Dynamic Programming Decision Tree</h1>
@@ -764,7 +765,7 @@ function DynamicProgrammingFlow() {
         </div>
       </div>
       
-      <div style={{ width: '100%', height: 'calc(100vh - 140px)' }}>
+              <div style={{ width: '100%', height: 'calc(100vh - 204px)' }}>
         <ReactFlow
           nodes={nodes}
           edges={edges}
@@ -813,8 +814,11 @@ function DynamicProgrammingFlow() {
 
 export default function DynamicProgrammingTree() {
   return (
-    <ReactFlowProvider>
-      <DynamicProgrammingFlow />
-    </ReactFlowProvider>
+    <div>
+      <Navbar />
+      <ReactFlowProvider>
+        <DynamicProgrammingFlow />
+      </ReactFlowProvider>
+    </div>
   )
 }

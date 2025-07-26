@@ -18,6 +18,7 @@ import {
   getViewportForBounds,
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
+import { Navbar } from '@/components/navbar'
 
 // Custom Decision Node Component
 const DecisionNode = ({ data }) => {
@@ -1981,7 +1982,7 @@ function BinaryTreeFlow() {
   )
 
   return (
-    <div style={{ width: '100vw', height: '100vh' }}>
+    <div style={{ width: '100vw', height: 'calc(100vh - 64px)' }}>
       <div className="p-4 bg-gray-100 border-b">
         <div className="flex justify-between items-center mb-2">
           <div className="flex items-center gap-4">
@@ -2068,7 +2069,7 @@ function BinaryTreeFlow() {
         </div>
       </div>
       
-      <div style={{ width: '100%', height: 'calc(100vh - 140px)' }}>
+              <div style={{ width: '100%', height: 'calc(100vh - 204px)' }}>
         <ReactFlow
           key={viewType}
           nodes={nodes}
@@ -2118,8 +2119,11 @@ function BinaryTreeFlow() {
 
 export default function BinaryTreeDecisionTree() {
   return (
-    <ReactFlowProvider>
-      <BinaryTreeFlow />
-    </ReactFlowProvider>
+    <div>
+      <Navbar />
+      <ReactFlowProvider>
+        <BinaryTreeFlow />
+      </ReactFlowProvider>
+    </div>
   )
 }

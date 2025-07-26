@@ -18,6 +18,7 @@ import {
   getViewportForBounds,
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
+import { Navbar } from '@/components/navbar'
 
 // Custom Decision Node Component
 const DecisionNode = ({ data }) => {
@@ -1304,7 +1305,7 @@ function SortingFlow() {
   }
 
   return (
-    <div style={{ width: '100vw', height: '100vh' }}>
+    <div style={{ width: '100vw', height: 'calc(100vh - 64px)' }}>
       <div className="p-4 bg-gray-100 border-b">
         <div className="flex justify-between items-center mb-2">
           <div className="flex items-center gap-4">
@@ -1375,7 +1376,7 @@ function SortingFlow() {
           <strong>Cross-references:</strong> Heap Sort (see <a href="/tree" className="text-blue-600 hover:underline">Binary Tree page</a>), Iterative implementations (see <a href="/stack" className="text-blue-600 hover:underline">Stack page</a>).
         </div>
       </div>
-      <div style={{ width: '100%', height: 'calc(100vh - 140px)' }}>
+              <div style={{ width: '100%', height: 'calc(100vh - 204px)' }}>
         <ReactFlow
           key={viewType} // Forces clean remount
           nodes={nodes}
@@ -1419,8 +1420,11 @@ function SortingFlow() {
 
 export default function SortingDecisionTree() {
   return (
-    <ReactFlowProvider>
-      <SortingFlow />
-    </ReactFlowProvider>
+    <div>
+      <Navbar />
+      <ReactFlowProvider>
+        <SortingFlow />
+      </ReactFlowProvider>
+    </div>
   )
 }
