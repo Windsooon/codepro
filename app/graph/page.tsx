@@ -1396,12 +1396,18 @@ function GraphProblemsFlow() {
   const reactFlowInstance = useReactFlow()
   const [viewType, setViewType] = useState('problem-type') // 'problem-type' or 'algorithm-approach'
 
-  const currentData = useMemo(() => {
+    const currentData = useMemo(() => {
     return viewType === 'problem-type' ? problemTypeData : algorithmApproachData
   }, [viewType])
 
-   const [nodes, setNodes, onNodesChange] = useNodesState(currentData.nodes)
-   const [edges, setEdges, onEdgesChange] = useEdgesState(currentData.edges)
+  const [nodes, setNodes, onNodesChange] = useNodesState(currentData.nodes)
+  const [edges, setEdges, onEdgesChange] = useEdgesState(currentData.edges)
+
+  // Force update when viewType changes
+  React.useEffect(() => {
+    setNodes(currentData.nodes)
+    setEdges(currentData.edges)
+  }, [currentData.nodes, currentData.edges, setNodes, setEdges])
 
   const onConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
