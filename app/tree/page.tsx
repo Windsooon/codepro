@@ -2022,6 +2022,26 @@ function BinaryTreeFlow() {
           </div>
           <div className="flex gap-2">
             <button
+              onClick={() => {
+                console.log('Current node positions:');
+                const currentPositions = nodes.map(node => ({
+                  id: node.id,
+                  position: node.position
+                }));
+                console.log(JSON.stringify(currentPositions, null, 2));
+              }}
+              className="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg shadow-md transition-colors duration-200 flex items-center gap-2"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M9 12l2 2 4-4"/>
+                <path d="M21 12c-1 0-3-1-3-3s2-3 3-3 3 1 3 3-2 3-3 3"/>
+                <path d="M3 12c1 0 3-1 3-3s-2-3-3-3-3 1-3 3 2 3 3 3"/>
+                <path d="M12 21c0-1-1-3-3-3s-3 2-3 3 1 3 3 3 3-2 3-3"/>
+                <path d="M12 3c0 1-1 3-3 3s-3-2-3-3 1-3 3-3 3 2 3 3"/>
+              </svg>
+              Log Positions
+            </button>
+            <button
               onClick={() => downloadSvg(reactFlowInstance, viewType)}
               className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg shadow-md transition-colors duration-200 flex items-center gap-2"
             >
