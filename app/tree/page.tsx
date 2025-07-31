@@ -39,7 +39,7 @@ const DecisionNode = ({ data }) => {
   )
 }
 
-// Custom Leaf Node Component (Tree Techniques)
+// Custom Leaf Node Component (Tree Techniques) - now as group node
 const LeafNode = ({ data }) => {
   return (
     <div className="px-4 py-3 shadow-lg rounded-xl bg-green-100 border-2 border-green-300 min-w-[300px] max-w-[350px]">
@@ -57,26 +57,42 @@ const LeafNode = ({ data }) => {
   )
 }
 
-// Problem Node Component
+// Group Node Component (combines technique + problems)
+const GroupNode = ({ data }) => {
+  return (
+    <div className="bg-green-50 border-2 border-green-200 rounded-xl p-3" style={{ minWidth: 320, minHeight: 250 }}>
+      <Handle type="target" position={Position.Top} className="w-3 h-3" />
+      <div className="text-center mb-2">
+        <div className="text-sm font-bold text-green-800">{data.technique}</div>
+        <div className="text-xs text-green-700">
+          <div><strong>Approach:</strong> {data.approach}</div>
+          <div><strong>Complexity:</strong> {data.complexity}</div>
+        </div>
+      </div>
+      <Handle type="source" position={Position.Bottom} className="w-3 h-3" />
+    </div>
+  )
+}
+
+// Problem Node Component (child nodes)
 const ProblemNode = ({ data }) => {
   return (
-    <div className="px-4 py-3 shadow-lg rounded-lg bg-orange-100 border-2 border-orange-300 min-w-[350px] max-w-[400px]">
-      <Handle type="target" position={Position.Top} className="w-3 h-3" />
+    <div className="px-3 py-2 shadow-md rounded-lg bg-orange-50 border border-orange-200 min-w-[280px]">
       <div className="text-center">
-        <div className="text-sm font-bold text-orange-800 mb-2">LeetCode Problems</div>
+        <div className="text-xs font-bold text-orange-800 mb-1">LeetCode Problems</div>
         <div className="text-xs text-orange-600">
-          <div className="max-h-32 overflow-y-auto">
-            {data.problems.map((problem, index) => (
+          <div className="max-h-24 overflow-y-auto">
+            {data.problems.slice(0, 3).map((problem, index) => (
               <div key={index} className="mb-1 flex justify-between">
                 <a 
                   href={problem.url} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="text-blue-600 hover:text-blue-800 underline flex-1"
+                  className="text-blue-600 hover:text-blue-800 underline flex-1 text-xs"
                 >
                   {problem.number}. {problem.title}
                 </a>
-                <span className={`text-xs px-1 rounded ml-2 ${
+                <span className={`text-xs px-1 rounded ml-1 ${
                   problem.difficulty === 'Easy' ? 'bg-green-200 text-green-800' :
                   problem.difficulty === 'Medium' ? 'bg-yellow-200 text-yellow-800' :
                   'bg-red-200 text-red-800'
@@ -107,6 +123,7 @@ const RootNode = ({ data }) => {
 const nodeTypes = {
   decision: DecisionNode,
   leaf: LeafNode,
+  group: GroupNode,
   problem: ProblemNode,
   root: RootNode,
 }
@@ -382,11 +399,12 @@ const problemTypeData = {
       }
     },
 
-    // Leaf Nodes (Tree Techniques) - adjusted for center alignment
+    // Group Nodes (Tree Techniques with embedded problems)
     {
-      id: 'leaf1',
-      type: 'leaf',
-      position: { x: 0, y: 600 }, // Adjusted for center alignment (leaf nodes are ~325px wide)
+      id: 'group1',
+      type: 'group',
+      position: { x: -50, y: 600 },
+      style: { width: 350, height: 280 },
       data: {
         technique: 'Preorder Traversal',
         approach: 'Root → Left → Right traversal order',
@@ -396,9 +414,10 @@ const problemTypeData = {
     },
 
     {
-      id: 'leaf2',
-      type: 'leaf',
-      position: { x: 200, y: 600 }, // Adjusted for center alignment
+      id: 'group2',
+      type: 'group',
+      position: { x: 150, y: 600 },
+      style: { width: 350, height: 280 },
       data: {
         technique: 'Inorder Traversal',
         approach: 'Left → Root → Right traversal order',
@@ -408,9 +427,10 @@ const problemTypeData = {
     },
 
     {
-      id: 'leaf3',
-      type: 'leaf',
-      position: { x: 0, y: 760 }, // Adjusted for center alignment
+      id: 'group3',
+      type: 'group',
+      position: { x: -50, y: 920 },
+      style: { width: 350, height: 280 },
       data: {
         technique: 'Postorder Traversal',
         approach: 'Left → Right → Root traversal order',
@@ -420,9 +440,10 @@ const problemTypeData = {
     },
 
     {
-      id: 'leaf4',
-      type: 'leaf',
-      position: { x: 200, y: 760 }, // Adjusted for center alignment
+      id: 'group4',
+      type: 'group',
+      position: { x: 150, y: 920 },
+      style: { width: 350, height: 280 },
       data: {
         technique: 'Level-order Traversal',
         approach: 'BFS traversal level by level',
@@ -432,9 +453,10 @@ const problemTypeData = {
     },
 
     {
-      id: 'leaf5',
-      type: 'leaf',
-      position: { x: 400, y: 600 }, // Adjusted for center alignment
+      id: 'group5',
+      type: 'group',
+      position: { x: 350, y: 600 },
+      style: { width: 350, height: 280 },
       data: {
         technique: 'Morris Traversal',
         approach: 'Threaded binary tree for O(1) space',
@@ -444,9 +466,10 @@ const problemTypeData = {
     },
 
     {
-      id: 'leaf6',
-      type: 'leaf',
-      position: { x: 600, y: 600 }, // Adjusted for center alignment
+      id: 'group6',
+      type: 'group',
+      position: { x: 550, y: 600 },
+      style: { width: 350, height: 280 },
       data: {
         technique: 'Iterative Traversal',
         approach: 'Stack-based iterative implementation',
@@ -456,9 +479,10 @@ const problemTypeData = {
     },
 
     {
-      id: 'leaf7',
-      type: 'leaf',
-      position: { x: 650, y: 460 }, // Adjusted for center alignment
+      id: 'group7',
+      type: 'group',
+      position: { x: 550, y: 460 },
+      style: { width: 350, height: 280 },
       data: {
         technique: 'Tree Construction',
         approach: 'Build tree from traversal arrays',
@@ -468,9 +492,10 @@ const problemTypeData = {
     },
 
     {
-      id: 'leaf8',
-      type: 'leaf',
-      position: { x: 900, y: 600 }, // Adjusted for center alignment
+      id: 'group8',
+      type: 'group',
+      position: { x: 850, y: 600 },
+      style: { width: 350, height: 280 },
       data: {
         technique: 'Tree Serialization',
         approach: 'Convert tree to/from string representation',
@@ -480,9 +505,10 @@ const problemTypeData = {
     },
 
     {
-      id: 'leaf9',
-      type: 'leaf',
-      position: { x: 1000, y: 600 }, // Adjusted for center alignment
+      id: 'group9',
+      type: 'group',
+      position: { x: 950, y: 600 },
+      style: { width: 350, height: 280 },
       data: {
         technique: 'BST Validation',
         approach: 'Validate binary search tree properties',
@@ -492,9 +518,10 @@ const problemTypeData = {
     },
 
     {
-      id: 'leaf10',
-      type: 'leaf',
-      position: { x: 1200, y: 600 }, // Adjusted for center alignment
+      id: 'group10',
+      type: 'group',
+      position: { x: 1150, y: 600 },
+      style: { width: 350, height: 280 },
       data: {
         technique: 'Tree Properties',
         approach: 'Calculate height, diameter, balance',
@@ -504,9 +531,10 @@ const problemTypeData = {
     },
 
     {
-      id: 'leaf11',
-      type: 'leaf',
-      position: { x: 1400, y: 600 }, // Adjusted for center alignment
+      id: 'group11',
+      type: 'group',
+      position: { x: 1350, y: 600 },
+      style: { width: 350, height: 280 },
       data: {
         technique: 'Lowest Common Ancestor',
         approach: 'Find LCA of two nodes',
@@ -516,9 +544,10 @@ const problemTypeData = {
     },
 
     {
-      id: 'leaf12',
-      type: 'leaf',
-      position: { x: 1600, y: 600 }, // Adjusted for center alignment
+      id: 'group12',
+      type: 'group',
+      position: { x: 1550, y: 600 },
+      style: { width: 350, height: 280 },
       data: {
         technique: 'Path Sum Problems',
         approach: 'Find paths with specific sum',
@@ -528,9 +557,10 @@ const problemTypeData = {
     },
 
     {
-      id: 'leaf13',
-      type: 'leaf',
-      position: { x: 800, y: 760 }, // Adjusted for center alignment
+      id: 'group13',
+      type: 'group',
+      position: { x: 750, y: 920 },
+      style: { width: 350, height: 280 },
       data: {
         technique: 'Tree DP',
         approach: 'Dynamic programming on trees',
@@ -540,9 +570,10 @@ const problemTypeData = {
     },
 
     {
-      id: 'leaf14',
-      type: 'leaf',
-      position: { x: 1000, y: 760 }, // Adjusted for center alignment
+      id: 'group14',
+      type: 'group',
+      position: { x: 950, y: 920 },
+      style: { width: 350, height: 280 },
       data: {
         technique: 'Symmetric Tree',
         approach: 'Check tree symmetry/mirror properties',
@@ -552,9 +583,10 @@ const problemTypeData = {
     },
 
     {
-      id: 'leaf15',
-      type: 'leaf',
-      position: { x: 1200, y: 760 }, // Adjusted for center alignment
+      id: 'group15',
+      type: 'group',
+      position: { x: 1150, y: 920 },
+      style: { width: 350, height: 280 },
       data: {
         technique: 'Subtree Matching',
         approach: 'Check if one tree is subtree of another',
@@ -563,11 +595,13 @@ const problemTypeData = {
       }
     },
 
-    // Problem Nodes - adjusted for center alignment (problem nodes are ~375px wide)
+    // Problem Nodes (children of group nodes)
     {
       id: 'problems1',
       type: 'problem',
-      position: { x: -25, y: 740 }, // Adjusted for center alignment
+      position: { x: 35, y: 80 },
+      parentId: 'group1',
+      extent: 'parent',
       data: {
         problems: [
           { number: 144, title: 'Binary Tree Preorder Traversal', url: 'https://leetcode.com/problems/binary-tree-preorder-traversal/', difficulty: 'Easy' },
@@ -581,7 +615,9 @@ const problemTypeData = {
     {
       id: 'problems2',
       type: 'problem',
-      position: { x: 175, y: 740 }, // Adjusted for center alignment
+      position: { x: 35, y: 80 },
+      parentId: 'group2',
+      extent: 'parent',
       data: {
         problems: [
           { number: 94, title: 'Binary Tree Inorder Traversal', url: 'https://leetcode.com/problems/binary-tree-inorder-traversal/', difficulty: 'Easy' },
@@ -595,7 +631,9 @@ const problemTypeData = {
     {
       id: 'problems3',
       type: 'problem',
-      position: { x: -25, y: 900 }, // Adjusted for center alignment
+      position: { x: 35, y: 80 },
+      parentId: 'group3',
+      extent: 'parent',
       data: {
         problems: [
           { number: 145, title: 'Binary Tree Postorder Traversal', url: 'https://leetcode.com/problems/binary-tree-postorder-traversal/', difficulty: 'Easy' },
@@ -609,7 +647,9 @@ const problemTypeData = {
     {
       id: 'problems4',
       type: 'problem',
-      position: { x: 175, y: 900 }, // Adjusted for center alignment
+      position: { x: 35, y: 80 },
+      parentId: 'group4',
+      extent: 'parent',
       data: {
         problems: [
           { number: 102, title: 'Binary Tree Level Order Traversal', url: 'https://leetcode.com/problems/binary-tree-level-order-traversal/', difficulty: 'Medium' },
@@ -623,7 +663,9 @@ const problemTypeData = {
     {
       id: 'problems5',
       type: 'problem',
-      position: { x: 375, y: 740 }, // Adjusted for center alignment
+      position: { x: 35, y: 80 },
+      parentId: 'group5',
+      extent: 'parent',
       data: {
         problems: [
           { number: 99, title: 'Recover Binary Search Tree', url: 'https://leetcode.com/problems/recover-binary-search-tree/', difficulty: 'Medium' },
@@ -637,7 +679,9 @@ const problemTypeData = {
     {
       id: 'problems6',
       type: 'problem',
-      position: { x: 575, y: 740 }, // Adjusted for center alignment
+      position: { x: 35, y: 80 },
+      parentId: 'group6',
+      extent: 'parent',
       data: {
         problems: [
           { number: 104, title: 'Maximum Depth of Binary Tree', url: 'https://leetcode.com/problems/maximum-depth-of-binary-tree/', difficulty: 'Easy' },
@@ -651,7 +695,9 @@ const problemTypeData = {
     {
       id: 'problems7',
       type: 'problem',
-      position: { x: 475, y: 600 }, // Adjusted for center alignment
+      position: { x: 35, y: 80 },
+      parentId: 'group7',
+      extent: 'parent',
       data: {
         problems: [
           { number: 105, title: 'Construct Binary Tree from Preorder and Inorder Traversal', url: 'https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/', difficulty: 'Medium' },
@@ -665,7 +711,9 @@ const problemTypeData = {
     {
       id: 'problems8',
       type: 'problem',
-      position: { x: 875, y: 740 }, // Adjusted for center alignment
+      position: { x: 35, y: 80 },
+      parentId: 'group8',
+      extent: 'parent',
       data: {
         problems: [
           { number: 297, title: 'Serialize and Deserialize Binary Tree', url: 'https://leetcode.com/problems/serialize-and-deserialize-binary-tree/', difficulty: 'Hard' },
@@ -679,7 +727,9 @@ const problemTypeData = {
     {
       id: 'problems9',
       type: 'problem',
-      position: { x: 975, y: 740 }, // Adjusted for center alignment
+      position: { x: 35, y: 80 },
+      parentId: 'group9',
+      extent: 'parent',
       data: {
         problems: [
           { number: 98, title: 'Validate Binary Search Tree', url: 'https://leetcode.com/problems/validate-binary-search-tree/', difficulty: 'Medium' },
@@ -693,7 +743,9 @@ const problemTypeData = {
     {
       id: 'problems10',
       type: 'problem',
-      position: { x: 1175, y: 740 }, // Adjusted for center alignment
+      position: { x: 35, y: 80 },
+      parentId: 'group10',
+      extent: 'parent',
       data: {
         problems: [
           { number: 104, title: 'Maximum Depth of Binary Tree', url: 'https://leetcode.com/problems/maximum-depth-of-binary-tree/', difficulty: 'Easy' },
@@ -707,7 +759,9 @@ const problemTypeData = {
     {
       id: 'problems11',
       type: 'problem',
-      position: { x: 1375, y: 740 }, // Adjusted for center alignment
+      position: { x: 35, y: 80 },
+      parentId: 'group11',
+      extent: 'parent',
       data: {
         problems: [
           { number: 236, title: 'Lowest Common Ancestor of a Binary Tree', url: 'https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/', difficulty: 'Medium' },
@@ -721,7 +775,9 @@ const problemTypeData = {
     {
       id: 'problems12',
       type: 'problem',
-      position: { x: 1575, y: 740 }, // Adjusted for center alignment
+      position: { x: 35, y: 80 },
+      parentId: 'group12',
+      extent: 'parent',
       data: {
         problems: [
           { number: 112, title: 'Path Sum', url: 'https://leetcode.com/problems/path-sum/', difficulty: 'Easy' },
@@ -735,7 +791,9 @@ const problemTypeData = {
     {
       id: 'problems13',
       type: 'problem',
-      position: { x: 775, y: 900 }, // Adjusted for center alignment
+      position: { x: 35, y: 80 },
+      parentId: 'group13',
+      extent: 'parent',
       data: {
         problems: [
           { number: 337, title: 'House Robber III', url: 'https://leetcode.com/problems/house-robber-iii/', difficulty: 'Medium' },
@@ -749,7 +807,9 @@ const problemTypeData = {
     {
       id: 'problems14',
       type: 'problem',
-      position: { x: 975, y: 900 }, // Adjusted for center alignment
+      position: { x: 35, y: 80 },
+      parentId: 'group14',
+      extent: 'parent',
       data: {
         problems: [
           { number: 101, title: 'Symmetric Tree', url: 'https://leetcode.com/problems/symmetric-tree/', difficulty: 'Easy' },
@@ -763,7 +823,9 @@ const problemTypeData = {
     {
       id: 'problems15',
       type: 'problem',
-      position: { x: 1175, y: 900 }, // Adjusted for center alignment
+      position: { x: 35, y: 80 },
+      parentId: 'group15',
+      extent: 'parent',
       data: {
         problems: [
           { number: 572, title: 'Subtree of Another Tree', url: 'https://leetcode.com/problems/subtree-of-another-tree/', difficulty: 'Easy' },
@@ -790,44 +852,27 @@ const problemTypeData = {
     // Level 2 to Level 3
     { id: 'e4', source: 'traversal-type', sourceHandle: 'yes', target: 'dfs-order', label: 'DFS', style: { stroke: '#10b981' } },
     { id: 'e5', source: 'traversal-type', sourceHandle: 'no', target: 'space-constraint', label: 'BFS/Special', style: { stroke: '#ef4444' } },
-    { id: 'e6', source: 'construction-type', sourceHandle: 'yes', target: 'leaf7', label: 'Yes', style: { stroke: '#10b981' } },
+    { id: 'e6', source: 'construction-type', sourceHandle: 'yes', target: 'group7', label: 'Yes', style: { stroke: '#10b981' } },
     { id: 'e7', source: 'validation-type', sourceHandle: 'yes', target: 'tree-structure', label: 'Tree Props', style: { stroke: '#10b981' } },
     { id: 'e8', source: 'search-path-type', sourceHandle: 'yes', target: 'path-type', label: 'Paths', style: { stroke: '#10b981' } },
     
-    // Level 3 to Leaves
-    { id: 'e9', source: 'dfs-order', sourceHandle: 'yes', target: 'leaf1', label: 'Preorder', style: { stroke: '#10b981' } },
-    { id: 'e10', source: 'dfs-order', sourceHandle: 'no', target: 'leaf2', label: 'Inorder', style: { stroke: '#ef4444' } },
-    { id: 'e11', source: 'space-constraint', sourceHandle: 'yes', target: 'leaf5', label: 'O(1) Space', style: { stroke: '#10b981' } },
-    { id: 'e12', source: 'space-constraint', sourceHandle: 'no', target: 'leaf4', label: 'Normal', style: { stroke: '#ef4444' } },
-    { id: 'e13', source: 'tree-structure', sourceHandle: 'yes', target: 'leaf9', label: 'BST', style: { stroke: '#10b981' } },
-    { id: 'e14', source: 'tree-structure', sourceHandle: 'no', target: 'leaf10', label: 'General', style: { stroke: '#ef4444' } },
-    { id: 'e15', source: 'path-type', sourceHandle: 'yes', target: 'leaf12', label: 'Yes', style: { stroke: '#10b981' } },
-    { id: 'e16', source: 'path-type', sourceHandle: 'no', target: 'leaf11', label: 'No (LCA)', style: { stroke: '#ef4444' } },
+    // Level 3 to Groups
+    { id: 'e9', source: 'dfs-order', sourceHandle: 'yes', target: 'group1', label: 'Preorder', style: { stroke: '#10b981' } },
+    { id: 'e10', source: 'dfs-order', sourceHandle: 'no', target: 'group2', label: 'Inorder', style: { stroke: '#ef4444' } },
+    { id: 'e11', source: 'space-constraint', sourceHandle: 'yes', target: 'group5', label: 'O(1) Space', style: { stroke: '#10b981' } },
+    { id: 'e12', source: 'space-constraint', sourceHandle: 'no', target: 'group4', label: 'Normal', style: { stroke: '#ef4444' } },
+    { id: 'e13', source: 'tree-structure', sourceHandle: 'yes', target: 'group9', label: 'BST', style: { stroke: '#10b981' } },
+    { id: 'e14', source: 'tree-structure', sourceHandle: 'no', target: 'group10', label: 'General', style: { stroke: '#ef4444' } },
+    { id: 'e15', source: 'path-type', sourceHandle: 'yes', target: 'group12', label: 'Yes', style: { stroke: '#10b981' } },
+    { id: 'e16', source: 'path-type', sourceHandle: 'no', target: 'group11', label: 'No (LCA)', style: { stroke: '#ef4444' } },
     
     // Additional connections
-    { id: 'e17', source: 'dfs-order', target: 'leaf3', label: 'Postorder', style: { stroke: '#8b5cf6' } },
-    { id: 'e18', source: 'space-constraint', target: 'leaf6', label: 'Iterative', style: { stroke: '#8b5cf6' } },
-    { id: 'e19', source: 'construction-type', target: 'leaf8', label: 'Serialize', style: { stroke: '#8b5cf6' } },
-    { id: 'e20', source: 'validation-type', target: 'leaf14', label: 'Symmetric', style: { stroke: '#8b5cf6' } },
-    { id: 'e21', source: 'search-path-type', target: 'leaf13', label: 'DP', style: { stroke: '#8b5cf6' } },
-    { id: 'e22', source: 'search-path-type', target: 'leaf15', label: 'Subtree', style: { stroke: '#8b5cf6' } },
-    
-    // Leaf nodes to Problem nodes
-    { id: 'e23', source: 'leaf1', target: 'problems1', style: { stroke: '#f97316' } },
-    { id: 'e24', source: 'leaf2', target: 'problems2', style: { stroke: '#f97316' } },
-    { id: 'e25', source: 'leaf3', target: 'problems3', style: { stroke: '#f97316' } },
-    { id: 'e26', source: 'leaf4', target: 'problems4', style: { stroke: '#f97316' } },
-    { id: 'e27', source: 'leaf5', target: 'problems5', style: { stroke: '#f97316' } },
-    { id: 'e28', source: 'leaf6', target: 'problems6', style: { stroke: '#f97316' } },
-    { id: 'e29', source: 'leaf7', target: 'problems7', style: { stroke: '#f97316' } },
-    { id: 'e30', source: 'leaf8', target: 'problems8', style: { stroke: '#f97316' } },
-    { id: 'e31', source: 'leaf9', target: 'problems9', style: { stroke: '#f97316' } },
-    { id: 'e32', source: 'leaf10', target: 'problems10', style: { stroke: '#f97316' } },
-    { id: 'e33', source: 'leaf11', target: 'problems11', style: { stroke: '#f97316' } },
-    { id: 'e34', source: 'leaf12', target: 'problems12', style: { stroke: '#f97316' } },
-    { id: 'e35', source: 'leaf13', target: 'problems13', style: { stroke: '#f97316' } },
-    { id: 'e36', source: 'leaf14', target: 'problems14', style: { stroke: '#f97316' } },
-    { id: 'e37', source: 'leaf15', target: 'problems15', style: { stroke: '#f97316' } },
+    { id: 'e17', source: 'dfs-order', target: 'group3', label: 'Postorder', style: { stroke: '#8b5cf6' } },
+    { id: 'e18', source: 'space-constraint', target: 'group6', label: 'Iterative', style: { stroke: '#8b5cf6' } },
+    { id: 'e19', source: 'construction-type', target: 'group8', label: 'Serialize', style: { stroke: '#8b5cf6' } },
+    { id: 'e20', source: 'validation-type', target: 'group14', label: 'Symmetric', style: { stroke: '#8b5cf6' } },
+    { id: 'e21', source: 'search-path-type', target: 'group13', label: 'DP', style: { stroke: '#8b5cf6' } },
+    { id: 'e22', source: 'search-path-type', target: 'group15', label: 'Subtree', style: { stroke: '#8b5cf6' } },
   ]
 }
 
