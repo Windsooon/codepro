@@ -282,7 +282,7 @@ const problemTypeData = {
     {
       id: 'root',
       type: 'root',
-      position: { x: 1000, y: 50 },
+      position: { x: 900, y: 50 }, // Adjusted for center alignment
       data: { label: 'Binary Tree Problems' }
     },
     
@@ -290,7 +290,7 @@ const problemTypeData = {
     {
       id: 'operation-type',
       type: 'decision',
-      position: { x: 1000, y: 180 },
+      position: { x: 800, y: 180 }, // Adjusted for center alignment with wider decision node
       data: { 
         label: 'What type of operation do you need?',
         tooltip: 'Categorize by the main operation you need to perform'
@@ -301,7 +301,7 @@ const problemTypeData = {
     {
       id: 'traversal-type',
       type: 'decision',
-      position: { x: 400, y: 320 },
+      position: { x: 300, y: 320 }, // Adjusted for center alignment
       data: { 
         label: 'What type of traversal?',
         tooltip: 'Different ways to visit tree nodes'
@@ -312,7 +312,7 @@ const problemTypeData = {
     {
       id: 'construction-type',
       type: 'decision',
-      position: { x: 800, y: 320 },
+      position: { x: 650, y: 320 }, // Adjusted for center alignment
       data: { 
         label: 'Are you building from existing data?',
         tooltip: 'Building tree vs modifying existing tree'
@@ -323,7 +323,7 @@ const problemTypeData = {
     {
       id: 'validation-type',
       type: 'decision',
-      position: { x: 1200, y: 320 },
+      position: { x: 1050, y: 320 }, // Adjusted for center alignment
       data: { 
         label: 'What property do you need to validate?',
         tooltip: 'Different tree properties and validations'
@@ -334,7 +334,7 @@ const problemTypeData = {
     {
       id: 'search-path-type',
       type: 'decision',
-      position: { x: 1600, y: 320 },
+      position: { x: 1450, y: 320 }, // Adjusted for center alignment
       data: { 
         label: 'Are you looking for paths or ancestors?',
         tooltip: 'Path-based problems vs ancestor/relationship problems'
@@ -345,7 +345,7 @@ const problemTypeData = {
     {
       id: 'dfs-order',
       type: 'decision',
-      position: { x: 200, y: 460 },
+      position: { x: 100, y: 460 }, // Adjusted for center alignment
       data: { 
         label: 'Do you need specific DFS order?',
         tooltip: 'Preorder, inorder, postorder, or level-order'
@@ -355,7 +355,7 @@ const problemTypeData = {
     {
       id: 'space-constraint',
       type: 'decision',
-      position: { x: 600, y: 460 },
+      position: { x: 500, y: 460 }, // Adjusted for center alignment
       data: { 
         label: 'Do you have space constraints?',
         tooltip: 'O(1) space vs normal space complexity'
@@ -365,7 +365,7 @@ const problemTypeData = {
     {
       id: 'tree-structure',
       type: 'decision',
-      position: { x: 1200, y: 460 },
+      position: { x: 1050, y: 460 }, // Adjusted for center alignment
       data: { 
         label: 'Is it a Binary Search Tree?',
         tooltip: 'BST properties vs general binary tree'
@@ -375,18 +375,18 @@ const problemTypeData = {
     {
       id: 'path-type',
       type: 'decision',
-      position: { x: 1600, y: 460 },
+      position: { x: 1450, y: 460 }, // Adjusted for center alignment
       data: { 
         label: 'Do you need root-to-leaf paths?',
         tooltip: 'Path sum problems vs LCA problems'
       }
     },
 
-    // Leaf Nodes (Tree Techniques)
+    // Leaf Nodes (Tree Techniques) - adjusted for center alignment
     {
       id: 'leaf1',
       type: 'leaf',
-      position: { x: 100, y: 600 },
+      position: { x: 0, y: 600 }, // Adjusted for center alignment (leaf nodes are ~325px wide)
       data: {
         technique: 'Preorder Traversal',
         approach: 'Root → Left → Right traversal order',
@@ -398,7 +398,7 @@ const problemTypeData = {
     {
       id: 'leaf2',
       type: 'leaf',
-      position: { x: 300, y: 600 },
+      position: { x: 200, y: 600 }, // Adjusted for center alignment
       data: {
         technique: 'Inorder Traversal',
         approach: 'Left → Root → Right traversal order',
@@ -410,7 +410,7 @@ const problemTypeData = {
     {
       id: 'leaf3',
       type: 'leaf',
-      position: { x: 100, y: 760 },
+      position: { x: 0, y: 760 }, // Adjusted for center alignment
       data: {
         technique: 'Postorder Traversal',
         approach: 'Left → Right → Root traversal order',
@@ -422,7 +422,7 @@ const problemTypeData = {
     {
       id: 'leaf4',
       type: 'leaf',
-      position: { x: 300, y: 760 },
+      position: { x: 200, y: 760 }, // Adjusted for center alignment
       data: {
         technique: 'Level-order Traversal',
         approach: 'BFS traversal level by level',
@@ -434,7 +434,7 @@ const problemTypeData = {
     {
       id: 'leaf5',
       type: 'leaf',
-      position: { x: 500, y: 600 },
+      position: { x: 400, y: 600 }, // Adjusted for center alignment
       data: {
         technique: 'Morris Traversal',
         approach: 'Threaded binary tree for O(1) space',
@@ -446,7 +446,7 @@ const problemTypeData = {
     {
       id: 'leaf6',
       type: 'leaf',
-      position: { x: 700, y: 600 },
+      position: { x: 600, y: 600 }, // Adjusted for center alignment
       data: {
         technique: 'Iterative Traversal',
         approach: 'Stack-based iterative implementation',
@@ -458,7 +458,7 @@ const problemTypeData = {
     {
       id: 'leaf7',
       type: 'leaf',
-      position: { x: 800, y: 460 },
+      position: { x: 650, y: 460 }, // Adjusted for center alignment
       data: {
         technique: 'Tree Construction',
         approach: 'Build tree from traversal arrays',
@@ -470,7 +470,7 @@ const problemTypeData = {
     {
       id: 'leaf8',
       type: 'leaf',
-      position: { x: 1000, y: 600 },
+      position: { x: 900, y: 600 }, // Adjusted for center alignment
       data: {
         technique: 'Tree Serialization',
         approach: 'Convert tree to/from string representation',
@@ -482,7 +482,7 @@ const problemTypeData = {
     {
       id: 'leaf9',
       type: 'leaf',
-      position: { x: 1100, y: 600 },
+      position: { x: 1000, y: 600 }, // Adjusted for center alignment
       data: {
         technique: 'BST Validation',
         approach: 'Validate binary search tree properties',
@@ -494,7 +494,7 @@ const problemTypeData = {
     {
       id: 'leaf10',
       type: 'leaf',
-      position: { x: 1300, y: 600 },
+      position: { x: 1200, y: 600 }, // Adjusted for center alignment
       data: {
         technique: 'Tree Properties',
         approach: 'Calculate height, diameter, balance',
@@ -506,7 +506,7 @@ const problemTypeData = {
     {
       id: 'leaf11',
       type: 'leaf',
-      position: { x: 1500, y: 600 },
+      position: { x: 1400, y: 600 }, // Adjusted for center alignment
       data: {
         technique: 'Lowest Common Ancestor',
         approach: 'Find LCA of two nodes',
@@ -518,7 +518,7 @@ const problemTypeData = {
     {
       id: 'leaf12',
       type: 'leaf',
-      position: { x: 1700, y: 600 },
+      position: { x: 1600, y: 600 }, // Adjusted for center alignment
       data: {
         technique: 'Path Sum Problems',
         approach: 'Find paths with specific sum',
@@ -530,7 +530,7 @@ const problemTypeData = {
     {
       id: 'leaf13',
       type: 'leaf',
-      position: { x: 900, y: 760 },
+      position: { x: 800, y: 760 }, // Adjusted for center alignment
       data: {
         technique: 'Tree DP',
         approach: 'Dynamic programming on trees',
@@ -542,7 +542,7 @@ const problemTypeData = {
     {
       id: 'leaf14',
       type: 'leaf',
-      position: { x: 1100, y: 760 },
+      position: { x: 1000, y: 760 }, // Adjusted for center alignment
       data: {
         technique: 'Symmetric Tree',
         approach: 'Check tree symmetry/mirror properties',
@@ -554,7 +554,7 @@ const problemTypeData = {
     {
       id: 'leaf15',
       type: 'leaf',
-      position: { x: 1300, y: 760 },
+      position: { x: 1200, y: 760 }, // Adjusted for center alignment
       data: {
         technique: 'Subtree Matching',
         approach: 'Check if one tree is subtree of another',
@@ -563,11 +563,11 @@ const problemTypeData = {
       }
     },
 
-    // Problem Nodes
+    // Problem Nodes - adjusted for center alignment (problem nodes are ~375px wide)
     {
       id: 'problems1',
       type: 'problem',
-      position: { x: 100, y: 740 },
+      position: { x: -25, y: 740 }, // Adjusted for center alignment
       data: {
         problems: [
           { number: 144, title: 'Binary Tree Preorder Traversal', url: 'https://leetcode.com/problems/binary-tree-preorder-traversal/', difficulty: 'Easy' },
@@ -581,7 +581,7 @@ const problemTypeData = {
     {
       id: 'problems2',
       type: 'problem',
-      position: { x: 300, y: 740 },
+      position: { x: 175, y: 740 }, // Adjusted for center alignment
       data: {
         problems: [
           { number: 94, title: 'Binary Tree Inorder Traversal', url: 'https://leetcode.com/problems/binary-tree-inorder-traversal/', difficulty: 'Easy' },
@@ -595,7 +595,7 @@ const problemTypeData = {
     {
       id: 'problems3',
       type: 'problem',
-      position: { x: 100, y: 900 },
+      position: { x: -25, y: 900 }, // Adjusted for center alignment
       data: {
         problems: [
           { number: 145, title: 'Binary Tree Postorder Traversal', url: 'https://leetcode.com/problems/binary-tree-postorder-traversal/', difficulty: 'Easy' },
@@ -609,7 +609,7 @@ const problemTypeData = {
     {
       id: 'problems4',
       type: 'problem',
-      position: { x: 300, y: 900 },
+      position: { x: 175, y: 900 }, // Adjusted for center alignment
       data: {
         problems: [
           { number: 102, title: 'Binary Tree Level Order Traversal', url: 'https://leetcode.com/problems/binary-tree-level-order-traversal/', difficulty: 'Medium' },
@@ -623,7 +623,7 @@ const problemTypeData = {
     {
       id: 'problems5',
       type: 'problem',
-      position: { x: 500, y: 740 },
+      position: { x: 375, y: 740 }, // Adjusted for center alignment
       data: {
         problems: [
           { number: 99, title: 'Recover Binary Search Tree', url: 'https://leetcode.com/problems/recover-binary-search-tree/', difficulty: 'Medium' },
@@ -637,7 +637,7 @@ const problemTypeData = {
     {
       id: 'problems6',
       type: 'problem',
-      position: { x: 700, y: 740 },
+      position: { x: 575, y: 740 }, // Adjusted for center alignment
       data: {
         problems: [
           { number: 104, title: 'Maximum Depth of Binary Tree', url: 'https://leetcode.com/problems/maximum-depth-of-binary-tree/', difficulty: 'Easy' },
@@ -651,7 +651,7 @@ const problemTypeData = {
     {
       id: 'problems7',
       type: 'problem',
-      position: { x: 800, y: 600 },
+      position: { x: 475, y: 600 }, // Adjusted for center alignment
       data: {
         problems: [
           { number: 105, title: 'Construct Binary Tree from Preorder and Inorder Traversal', url: 'https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/', difficulty: 'Medium' },
@@ -665,7 +665,7 @@ const problemTypeData = {
     {
       id: 'problems8',
       type: 'problem',
-      position: { x: 1000, y: 740 },
+      position: { x: 875, y: 740 }, // Adjusted for center alignment
       data: {
         problems: [
           { number: 297, title: 'Serialize and Deserialize Binary Tree', url: 'https://leetcode.com/problems/serialize-and-deserialize-binary-tree/', difficulty: 'Hard' },
@@ -679,7 +679,7 @@ const problemTypeData = {
     {
       id: 'problems9',
       type: 'problem',
-      position: { x: 1100, y: 740 },
+      position: { x: 975, y: 740 }, // Adjusted for center alignment
       data: {
         problems: [
           { number: 98, title: 'Validate Binary Search Tree', url: 'https://leetcode.com/problems/validate-binary-search-tree/', difficulty: 'Medium' },
@@ -693,7 +693,7 @@ const problemTypeData = {
     {
       id: 'problems10',
       type: 'problem',
-      position: { x: 1300, y: 740 },
+      position: { x: 1175, y: 740 }, // Adjusted for center alignment
       data: {
         problems: [
           { number: 104, title: 'Maximum Depth of Binary Tree', url: 'https://leetcode.com/problems/maximum-depth-of-binary-tree/', difficulty: 'Easy' },
@@ -707,7 +707,7 @@ const problemTypeData = {
     {
       id: 'problems11',
       type: 'problem',
-      position: { x: 1500, y: 740 },
+      position: { x: 1375, y: 740 }, // Adjusted for center alignment
       data: {
         problems: [
           { number: 236, title: 'Lowest Common Ancestor of a Binary Tree', url: 'https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/', difficulty: 'Medium' },
@@ -721,7 +721,7 @@ const problemTypeData = {
     {
       id: 'problems12',
       type: 'problem',
-      position: { x: 1700, y: 740 },
+      position: { x: 1575, y: 740 }, // Adjusted for center alignment
       data: {
         problems: [
           { number: 112, title: 'Path Sum', url: 'https://leetcode.com/problems/path-sum/', difficulty: 'Easy' },
@@ -735,7 +735,7 @@ const problemTypeData = {
     {
       id: 'problems13',
       type: 'problem',
-      position: { x: 900, y: 900 },
+      position: { x: 775, y: 900 }, // Adjusted for center alignment
       data: {
         problems: [
           { number: 337, title: 'House Robber III', url: 'https://leetcode.com/problems/house-robber-iii/', difficulty: 'Medium' },
@@ -749,7 +749,7 @@ const problemTypeData = {
     {
       id: 'problems14',
       type: 'problem',
-      position: { x: 1100, y: 900 },
+      position: { x: 975, y: 900 }, // Adjusted for center alignment
       data: {
         problems: [
           { number: 101, title: 'Symmetric Tree', url: 'https://leetcode.com/problems/symmetric-tree/', difficulty: 'Easy' },
@@ -763,7 +763,7 @@ const problemTypeData = {
     {
       id: 'problems15',
       type: 'problem',
-      position: { x: 1300, y: 900 },
+      position: { x: 1175, y: 900 }, // Adjusted for center alignment
       data: {
         problems: [
           { number: 572, title: 'Subtree of Another Tree', url: 'https://leetcode.com/problems/subtree-of-another-tree/', difficulty: 'Easy' },
@@ -838,7 +838,7 @@ const algorithmApproachData = {
     {
       id: 'root',
       type: 'root',
-      position: { x: 1000, y: 50 },
+      position: { x: 800, y: 50 }, // Adjusted for center alignment
       data: { label: 'Binary Tree Algorithms by Approach' }
     },
     
@@ -846,7 +846,7 @@ const algorithmApproachData = {
     {
       id: 'approach-type',
       type: 'decision',
-      position: { x: 1000, y: 180 },
+      position: { x: 650, y: 180 }, // Adjusted for center alignment
       data: { 
         label: 'What algorithmic approach do you need?',
         tooltip: 'Different algorithmic strategies for tree problems'
@@ -857,7 +857,7 @@ const algorithmApproachData = {
     {
       id: 'dfs-strategy',
       type: 'decision',
-      position: { x: 400, y: 320 },
+      position: { x: 300, y: 320 }, // Adjusted for center alignment
       data: { 
         label: 'What type of DFS strategy?',
         tooltip: 'Recursive vs iterative DFS implementations'
@@ -868,7 +868,7 @@ const algorithmApproachData = {
     {
       id: 'bfs-strategy',
       type: 'decision',
-      position: { x: 800, y: 320 },
+      position: { x: 650, y: 320 }, // Adjusted for center alignment
       data: { 
         label: 'Do you need level-wise processing?',
         tooltip: 'BFS for level-order vs general breadth-first operations'
@@ -879,7 +879,7 @@ const algorithmApproachData = {
     {
       id: 'dp-strategy',
       type: 'decision',
-      position: { x: 1200, y: 320 },
+      position: { x: 1050, y: 320 }, // Adjusted for center alignment
       data: { 
         label: 'Do you need optimization across subtrees?',
         tooltip: 'Tree DP for optimization problems'
@@ -890,7 +890,7 @@ const algorithmApproachData = {
     {
       id: 'special-strategy',
       type: 'decision',
-      position: { x: 1600, y: 320 },
+      position: { x: 1450, y: 320 }, // Adjusted for center alignment
       data: { 
         label: 'Do you need space optimization?',
         tooltip: 'Morris traversal and other space-efficient techniques'
