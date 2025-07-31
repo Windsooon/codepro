@@ -290,7 +290,7 @@ const problemTypeData = {
     {
       id: 'operation-type',
       type: 'decision',
-      position: { x: 800, y: 180 }, // Adjusted for center alignment with wider decision node
+      position: { x: 854.3913455114823, y: 140.11301329157968 },
       data: { 
         label: 'What type of operation do you need?',
         tooltip: 'Categorize by the main operation you need to perform'
@@ -301,7 +301,7 @@ const problemTypeData = {
     {
       id: 'traversal-type',
       type: 'decision',
-      position: { x: 300, y: 320 }, // Adjusted for center alignment
+      position: { x: 739.9655503595454, y: 264.3999579215959 },
       data: { 
         label: 'What type of traversal?',
         tooltip: 'Different ways to visit tree nodes'
@@ -312,7 +312,7 @@ const problemTypeData = {
     {
       id: 'construction-type',
       type: 'decision',
-      position: { x: 650, y: 320 }, // Adjusted for center alignment
+      position: { x: 1028.3220254465323, y: 270.443440756205 },
       data: { 
         label: 'Are you building from existing data?',
         tooltip: 'Building tree vs modifying existing tree'
@@ -323,7 +323,7 @@ const problemTypeData = {
     {
       id: 'validation-type',
       type: 'decision',
-      position: { x: 1050, y: 320 }, // Adjusted for center alignment
+      position: { x: 1051.2086965669218, y: 384.0609180468569 },
       data: { 
         label: 'What property do you need to validate?',
         tooltip: 'Different tree properties and validations'
