@@ -60,16 +60,16 @@ const LeafNode = ({ data }) => {
 // Group Node Component (combines technique + problems)
 const GroupNode = ({ data }) => {
   return (
-    <div className="bg-green-50 border-2 border-green-200 rounded-xl p-3" style={{ minWidth: 320, minHeight: 250 }}>
-      <Handle type="target" position={Position.Top} className="w-3 h-3" />
-      <div className="text-center mb-2">
-        <div className="text-sm font-bold text-green-800">{data.technique}</div>
-        <div className="text-xs text-green-700">
-          <div><strong>Approach:</strong> {data.approach}</div>
-          <div><strong>Complexity:</strong> {data.complexity}</div>
+    <div className="bg-green-50 border border-green-200 rounded-lg p-2" style={{ minWidth: 260, minHeight: 180 }}>
+      <Handle type="target" position={Position.Top} className="w-2 h-2" />
+      <div className="text-center mb-1">
+        <div className="text-xs font-bold text-green-800 leading-tight">{data.technique}</div>
+        <div className="text-xs text-green-700 mt-1 leading-tight">
+          <div className="truncate"><strong>Approach:</strong> {data.approach}</div>
+          <div className="truncate"><strong>Complexity:</strong> {data.complexity}</div>
         </div>
       </div>
-      <Handle type="source" position={Position.Bottom} className="w-3 h-3" />
+      <Handle type="source" position={Position.Bottom} className="w-2 h-2" />
     </div>
   )
 }
@@ -77,30 +77,34 @@ const GroupNode = ({ data }) => {
 // Problem Node Component (child nodes)
 const ProblemNode = ({ data }) => {
   return (
-    <div className="px-3 py-2 shadow-md rounded-lg bg-orange-50 border border-orange-200 min-w-[280px]">
+    <div className="px-2 py-1 shadow-sm rounded bg-orange-50 border border-orange-200 min-w-[220px] max-w-[220px]">
       <div className="text-center">
-        <div className="text-xs font-bold text-orange-800 mb-1">LeetCode Problems</div>
+        <div className="text-xs font-semibold text-orange-800 mb-1">Problems</div>
         <div className="text-xs text-orange-600">
-          <div className="max-h-24 overflow-y-auto">
-            {data.problems.slice(0, 3).map((problem, index) => (
-              <div key={index} className="mb-1 flex justify-between">
+          <div className="max-h-16 overflow-y-auto">
+            {data.problems.slice(0, 2).map((problem, index) => (
+              <div key={index} className="mb-1">
                 <a 
                   href={problem.url} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="text-blue-600 hover:text-blue-800 underline flex-1 text-xs"
+                  className="text-blue-600 hover:text-blue-800 underline block text-xs leading-tight truncate"
+                  title={`${problem.number}. ${problem.title}`}
                 >
                   {problem.number}. {problem.title}
                 </a>
-                <span className={`text-xs px-1 rounded ml-1 ${
-                  problem.difficulty === 'Easy' ? 'bg-green-200 text-green-800' :
-                  problem.difficulty === 'Medium' ? 'bg-yellow-200 text-yellow-800' :
-                  'bg-red-200 text-red-800'
+                <span className={`text-xs px-1 rounded ${
+                  problem.difficulty === 'Easy' ? 'bg-green-200 text-green-700' :
+                  problem.difficulty === 'Medium' ? 'bg-yellow-200 text-yellow-700' :
+                  'bg-red-200 text-red-700'
                 }`}>
-                  {problem.difficulty}
+                  {problem.difficulty[0]}
                 </span>
               </div>
             ))}
+            {data.problems.length > 2 && (
+              <div className="text-xs text-gray-500 italic">+{data.problems.length - 2} more</div>
+            )}
           </div>
         </div>
       </div>
@@ -403,8 +407,8 @@ const problemTypeData = {
     {
       id: 'group1',
       type: 'group',
-      position: { x: -50, y: 600 },
-      style: { width: 350, height: 280 },
+      position: { x: -20, y: 600 },
+      style: { width: 280, height: 200 },
       data: {
         technique: 'Preorder Traversal',
         approach: 'Root → Left → Right traversal order',
@@ -416,8 +420,8 @@ const problemTypeData = {
     {
       id: 'group2',
       type: 'group',
-      position: { x: 150, y: 600 },
-      style: { width: 350, height: 280 },
+      position: { x: 180, y: 600 },
+      style: { width: 280, height: 200 },
       data: {
         technique: 'Inorder Traversal',
         approach: 'Left → Root → Right traversal order',
@@ -429,8 +433,8 @@ const problemTypeData = {
     {
       id: 'group3',
       type: 'group',
-      position: { x: -50, y: 920 },
-      style: { width: 350, height: 280 },
+      position: { x: -20, y: 820 },
+      style: { width: 280, height: 200 },
       data: {
         technique: 'Postorder Traversal',
         approach: 'Left → Right → Root traversal order',
@@ -442,8 +446,8 @@ const problemTypeData = {
     {
       id: 'group4',
       type: 'group',
-      position: { x: 150, y: 920 },
-      style: { width: 350, height: 280 },
+      position: { x: 180, y: 820 },
+      style: { width: 280, height: 200 },
       data: {
         technique: 'Level-order Traversal',
         approach: 'BFS traversal level by level',
@@ -455,8 +459,8 @@ const problemTypeData = {
     {
       id: 'group5',
       type: 'group',
-      position: { x: 350, y: 600 },
-      style: { width: 350, height: 280 },
+      position: { x: 380, y: 600 },
+      style: { width: 280, height: 200 },
       data: {
         technique: 'Morris Traversal',
         approach: 'Threaded binary tree for O(1) space',
@@ -468,8 +472,8 @@ const problemTypeData = {
     {
       id: 'group6',
       type: 'group',
-      position: { x: 550, y: 600 },
-      style: { width: 350, height: 280 },
+      position: { x: 580, y: 600 },
+      style: { width: 280, height: 200 },
       data: {
         technique: 'Iterative Traversal',
         approach: 'Stack-based iterative implementation',
@@ -481,8 +485,8 @@ const problemTypeData = {
     {
       id: 'group7',
       type: 'group',
-      position: { x: 550, y: 460 },
-      style: { width: 350, height: 280 },
+      position: { x: 480, y: 460 },
+      style: { width: 280, height: 200 },
       data: {
         technique: 'Tree Construction',
         approach: 'Build tree from traversal arrays',
@@ -494,8 +498,8 @@ const problemTypeData = {
     {
       id: 'group8',
       type: 'group',
-      position: { x: 850, y: 600 },
-      style: { width: 350, height: 280 },
+      position: { x: 780, y: 600 },
+      style: { width: 280, height: 200 },
       data: {
         technique: 'Tree Serialization',
         approach: 'Convert tree to/from string representation',
@@ -507,8 +511,8 @@ const problemTypeData = {
     {
       id: 'group9',
       type: 'group',
-      position: { x: 950, y: 600 },
-      style: { width: 350, height: 280 },
+      position: { x: 980, y: 600 },
+      style: { width: 280, height: 200 },
       data: {
         technique: 'BST Validation',
         approach: 'Validate binary search tree properties',
@@ -520,8 +524,8 @@ const problemTypeData = {
     {
       id: 'group10',
       type: 'group',
-      position: { x: 1150, y: 600 },
-      style: { width: 350, height: 280 },
+      position: { x: 1180, y: 600 },
+      style: { width: 280, height: 200 },
       data: {
         technique: 'Tree Properties',
         approach: 'Calculate height, diameter, balance',
@@ -533,8 +537,8 @@ const problemTypeData = {
     {
       id: 'group11',
       type: 'group',
-      position: { x: 1350, y: 600 },
-      style: { width: 350, height: 280 },
+      position: { x: 1380, y: 600 },
+      style: { width: 280, height: 200 },
       data: {
         technique: 'Lowest Common Ancestor',
         approach: 'Find LCA of two nodes',
@@ -546,8 +550,8 @@ const problemTypeData = {
     {
       id: 'group12',
       type: 'group',
-      position: { x: 1550, y: 600 },
-      style: { width: 350, height: 280 },
+      position: { x: 1580, y: 600 },
+      style: { width: 280, height: 200 },
       data: {
         technique: 'Path Sum Problems',
         approach: 'Find paths with specific sum',
@@ -559,8 +563,8 @@ const problemTypeData = {
     {
       id: 'group13',
       type: 'group',
-      position: { x: 750, y: 920 },
-      style: { width: 350, height: 280 },
+      position: { x: 780, y: 820 },
+      style: { width: 280, height: 200 },
       data: {
         technique: 'Tree DP',
         approach: 'Dynamic programming on trees',
@@ -572,8 +576,8 @@ const problemTypeData = {
     {
       id: 'group14',
       type: 'group',
-      position: { x: 950, y: 920 },
-      style: { width: 350, height: 280 },
+      position: { x: 980, y: 820 },
+      style: { width: 280, height: 200 },
       data: {
         technique: 'Symmetric Tree',
         approach: 'Check tree symmetry/mirror properties',
@@ -585,8 +589,8 @@ const problemTypeData = {
     {
       id: 'group15',
       type: 'group',
-      position: { x: 1150, y: 920 },
-      style: { width: 350, height: 280 },
+      position: { x: 1180, y: 820 },
+      style: { width: 280, height: 200 },
       data: {
         technique: 'Subtree Matching',
         approach: 'Check if one tree is subtree of another',
@@ -599,7 +603,7 @@ const problemTypeData = {
     {
       id: 'problems1',
       type: 'problem',
-      position: { x: 35, y: 80 },
+      position: { x: 30, y: 60 },
       parentId: 'group1',
       extent: 'parent',
       data: {
@@ -615,7 +619,7 @@ const problemTypeData = {
     {
       id: 'problems2',
       type: 'problem',
-      position: { x: 35, y: 80 },
+      position: { x: 30, y: 60 },
       parentId: 'group2',
       extent: 'parent',
       data: {
@@ -631,7 +635,7 @@ const problemTypeData = {
     {
       id: 'problems3',
       type: 'problem',
-      position: { x: 35, y: 80 },
+      position: { x: 30, y: 60 },
       parentId: 'group3',
       extent: 'parent',
       data: {
@@ -647,7 +651,7 @@ const problemTypeData = {
     {
       id: 'problems4',
       type: 'problem',
-      position: { x: 35, y: 80 },
+      position: { x: 30, y: 60 },
       parentId: 'group4',
       extent: 'parent',
       data: {
@@ -663,7 +667,7 @@ const problemTypeData = {
     {
       id: 'problems5',
       type: 'problem',
-      position: { x: 35, y: 80 },
+      position: { x: 30, y: 60 },
       parentId: 'group5',
       extent: 'parent',
       data: {
@@ -679,7 +683,7 @@ const problemTypeData = {
     {
       id: 'problems6',
       type: 'problem',
-      position: { x: 35, y: 80 },
+      position: { x: 30, y: 60 },
       parentId: 'group6',
       extent: 'parent',
       data: {
@@ -695,7 +699,7 @@ const problemTypeData = {
     {
       id: 'problems7',
       type: 'problem',
-      position: { x: 35, y: 80 },
+      position: { x: 30, y: 60 },
       parentId: 'group7',
       extent: 'parent',
       data: {
@@ -711,7 +715,7 @@ const problemTypeData = {
     {
       id: 'problems8',
       type: 'problem',
-      position: { x: 35, y: 80 },
+      position: { x: 30, y: 60 },
       parentId: 'group8',
       extent: 'parent',
       data: {
@@ -727,7 +731,7 @@ const problemTypeData = {
     {
       id: 'problems9',
       type: 'problem',
-      position: { x: 35, y: 80 },
+      position: { x: 30, y: 60 },
       parentId: 'group9',
       extent: 'parent',
       data: {
@@ -743,7 +747,7 @@ const problemTypeData = {
     {
       id: 'problems10',
       type: 'problem',
-      position: { x: 35, y: 80 },
+      position: { x: 30, y: 60 },
       parentId: 'group10',
       extent: 'parent',
       data: {
@@ -759,7 +763,7 @@ const problemTypeData = {
     {
       id: 'problems11',
       type: 'problem',
-      position: { x: 35, y: 80 },
+      position: { x: 30, y: 60 },
       parentId: 'group11',
       extent: 'parent',
       data: {
@@ -775,7 +779,7 @@ const problemTypeData = {
     {
       id: 'problems12',
       type: 'problem',
-      position: { x: 35, y: 80 },
+      position: { x: 30, y: 60 },
       parentId: 'group12',
       extent: 'parent',
       data: {
@@ -791,7 +795,7 @@ const problemTypeData = {
     {
       id: 'problems13',
       type: 'problem',
-      position: { x: 35, y: 80 },
+      position: { x: 30, y: 60 },
       parentId: 'group13',
       extent: 'parent',
       data: {
@@ -807,7 +811,7 @@ const problemTypeData = {
     {
       id: 'problems14',
       type: 'problem',
-      position: { x: 35, y: 80 },
+      position: { x: 30, y: 60 },
       parentId: 'group14',
       extent: 'parent',
       data: {
@@ -823,7 +827,7 @@ const problemTypeData = {
     {
       id: 'problems15',
       type: 'problem',
-      position: { x: 35, y: 80 },
+      position: { x: 30, y: 60 },
       parentId: 'group15',
       extent: 'parent',
       data: {
